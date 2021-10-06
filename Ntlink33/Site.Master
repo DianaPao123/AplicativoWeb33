@@ -1,0 +1,289 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Ntlink33.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> - Facturación Electrónica</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+ 
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/template/css/styles.css" rel="stylesheet" /><!-- formato-->
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+
+    <link href="~/Content/css/StyledropDown.css" rel="stylesheet" />
+     <link rel="stylesheet" href="~/Content/bootstrap.css"/>
+      <link href="~/Content/Mensajes.css" rel="stylesheet" />
+
+     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+ <%--    <link href="~/template/loader/Loaders.css" rel="stylesheet" />--%>
+     <link href="~/template/loader/Loaders3.css" rel="stylesheet" />
+ 
+
+
+    <style>
+         *:focus {
+    outline: 0 !important;
+}
+#nav1
+{  
+    background-color:#343a40; /*whichever you want*/
+    opacity: 0.9;
+    filter:(opacity=50);       
+    font-size: 2.0em !important;
+    
+}
+      /*#sidenavAccordion {
+              font-size: 1.2em !important;
+  
+        }*/
+.site-footer {
+  background: #f1f2f6;
+}
+
+
+        .imagen1 {
+     background-position: left;
+    background-size: cover;
+    background-color:darkgrey;
+    max-width: 950%; /* or to whatever you want here */
+    height:55px;
+    width:95%;
+}
+
+ .nav > li > a {
+     color: darkgray;
+     font-family: sans-serif;
+}
+
+        .sb-sidenav .sb-sidenav-menu .nav .nav-link {
+             color: darkgray;
+     font-family: sans-serif;
+        }
+</style>
+
+
+</head>
+<body class="sb-nav-fixed">
+<%--<div id="contenedor_carga"><div id="carga"></div></div>--%>
+<%--    <div id="contenedor_carga">
+    <div class="ring">Cargando
+  <span class="spani"></span>
+</div>
+        </div>--%>
+      <div class = "centered">
+  <div class = "blob-1"></div>
+  <div class = "blob-2"></div>
+</div>
+
+
+    <form runat="server">
+           
+        <asp:ScriptManager runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true">
+            <Scripts>
+                  
+            
+             <asp:ScriptReference Path="~/template/js/scripts.js" />  <%--ocultar menu --%>
+             <asp:ScriptReference Path="~/template/js/all.min.js" />   <%-- iconos y flechas --%>
+               
+             
+             <asp:ScriptReference Path="~/Scripts/jquery-3.3.1.min.js" />  
+            <asp:ScriptReference Path="~/Scripts/bootstrap.min.js" />  
+            <%-- <asp:ScriptReference Path="~/Scripts/bootstrap.bundle.min.js" /> --%> <%--opciones menu --%>
+         
+              <asp:ScriptReference Path="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"/>
+    
+
+            <%--    <asp:ScriptReference Path="~/Scripts/DropDown.js" />  --%>   
+         
+             <asp:ScriptReference Path="~/Scripts/select2.min.js" />
+                            
+   <%--            <asp:ScriptReference Path="~/Scripts/bootstrap-datepicker.js" />  --%>                       
+   <%--      <asp:ScriptReference Path="~/Scripts/custom.js" />  --%>
+
+        
+         
+              <%--Site Scripts--%>
+            </Scripts>
+
+        </asp:ScriptManager>
+
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark"  id="nav1">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" >NTLINK Facturación</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+          
+            <div class=" d-none d-md-inline-block ms-0 my-md-0 me-2"  style=" background-color:darkgray; width:95%">
+           <figure>
+                <img id="imagen3" src="Imagen/franja_nomina.png" class="imagen1" >
+               </figure>
+                
+        </div>
+            
+             <!-- Navbar-->
+            <ul class="navbar-nav list-inline- d-block me-1 ms-auto" style="opacity: 1;">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" 
+                        data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+         </nav>
+        
+
+          <div id="layoutSidenav">
+       
+             <div id="layoutSidenav_nav">
+                    <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion" style="background-color:white">
+               <div class="sb-sidenav-menu">
+		<div class="profile-sidebar">
+			 <div class="sb-sidenav-menu-heading" style="color:black; font-size:1.5em">
+                                 <img id="imagen" src="Imagen/ntlink.png" class="img-fluid" >
+                           </div>
+			
+			<div class="clear"></div>
+		</div>
+		<div class="divider"></div>
+	
+		<ul class="nav menu" >
+			<li class="active" ><a href="~/Default.aspx"  runat="server" ><em class="fas fa-sitemap">&nbsp;</em> Inicio</a></li>
+			<li><a href="~/wfrEmpresasConsulta.aspx"  runat="server"><em class="fas fa-user-tie">&nbsp;</em> Empresas</a></li>
+			<li><a href="~/wfrClientesConsulta.aspx" runat="server"><em class="fas fa-users">&nbsp;</em> Clientes</a></li>
+			<li  class="parent" style="list-style-type: none;"><a data-toggle="collapse" href="#sub-item-1">
+				<em class="fas fa-book-open"></em>
+                    Facturacion <span data-toggle="collapse" class="icon pull-right">
+                    <em class=" glyphicon glyphicon-s glyphicon-plus fa-lg" style="font-size: 10px" ></em></span>
+              </a>
+                	<ul class="children collapse" id="sub-item-1" style="list-style-type: none;">
+					<li><a class="nav-item nav-link" href="~/wfrFactura.aspx" runat="server">
+						<span class="glyphicon glyphicon-triangle-right" >&nbsp;</span> CFDI General
+					</a></li>
+					<li><a class="nav-item nav-link" href="~/wfrFacturaCompPagos.aspx" runat="server">
+						<span class="glyphicon glyphicon-triangle-right">&nbsp;</span>Complemento Pagos
+					</a></li>
+					
+				</ul>
+                </li>
+        	<li  class="parent" style="list-style-type: none;"><a data-toggle="collapse" href="#sub-item-2">
+				<em class="fas fa-table"></em>
+                    Reportes <span data-toggle="collapse" class="icon pull-right">
+                    <em class=" glyphicon glyphicon-s glyphicon-plus fa-lg" style="font-size: 10px" ></em></span>
+              </a>
+                	<ul class="children collapse" id="sub-item-2" style="list-style-type: none;">
+					<li><a class="nav-item nav-link" href="~/wfrFacturasConsulta.aspx" runat="server">
+						<span class="fa fa-share" >&nbsp;</span> Reportes CFDI
+					</a></li>
+					<li><a class="nav-item nav-link" href="~/wfrConfirmacionesConsulta.aspx" runat="server">
+						<span class="fa fa-arrow-right">&nbsp;</span>Confirmaciones
+					</a></li>
+					
+				</ul>
+                </li>    
+			<li><a href="login.html"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+		</ul>
+
+                   </div>
+     <div class="sb-sidenav-footer" style="background-color:#d7d7d9; opacity:0.8" >
+         <div class="profile-usertitle ms-2 mt-8" style="font-size:12px;">
+				<div class="profile-usertitle-name ">Folios Contratados:
+                    <asp:Label runat="server" ID="lblContratos" Font-Bold="True" class="control-label" ></asp:Label></div>
+				<div class="profile-usertitle-name ">Restantes de Emision:
+                    <asp:Label runat="server" ID="lblEmision" Font-Bold="True" class="control-label" ></asp:Label></div>
+				<div class="profile-usertitle-name ">Restantes de Timbrado:
+                    <asp:Label runat="server" ID="lblTimbrado" Font-Bold="True" class="control-label" ></asp:Label></div>
+				
+			</div>
+                      <%--  <div class="small">Conectado como:</div>--%>
+         <div class="profile-usertitle-name " >
+                        <asp:Label runat="server" ID="lblEmpresa"  class="control-label" ForeColor="Black"  Font-Bold="true" Font-Size="10px"/>
+          </div>
+             </div>
+</nav>
+	</div><!--/.sidebar-->
+	
+
+          <div id="layoutSidenav_content" style="background-color:#f1f2f6">
+                <main>
+                    <div class="container-fluid px-4">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+                        </div>
+                    </main>
+								
+         
+                <footer class="py-4  mt-auto" >
+                    <div class="container-fluid px-4" >
+                        <div class="d-flex align-items-center justify-content-between small" >
+                            <div class="text-muted">Copyright &copy; Ntlink 2021</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+        </div>
+
+      </div>
+
+
+    </form>
+</body>
+<%--<script type="text/javascript">
+	window.onload = function(){
+		var contenedor = document.getElementById('contenedor_carga');
+		contenedor.style.visibility = 'hidden';
+		contenedor.style.opacity = '0'; 
+	}
+
+</script>--%>
+
+<script type="text/javascript">
+
+//$(document).ready(function(){
+//  	$('.collapse.in').each(function(){
+//		$(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+//	});
+  	
+//	$('.collapse').on('shown.bs.collapse', function(){
+//		$(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+//	}).on('hidden.bs.collapse', function(){
+//		$(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+//	});       
+//});
+
+//!function ($) {
+//$(document).on("click","ul.nav li.parent > a ", function(){          
+//        $(this).find('em').toggleClass("fa-minus");      
+//    }); 
+//    $(".sidebar span.icon").find('em:first').addClass("fa-plus");
+//}(window.jQuery);
+
+
+    !function ($) {
+    $(document).on("click", "ul.nav li.parent > a ", function () {
+        $(this).find('em:first').toggleClass("glyphicon-minus");
+    });
+    $(".sidebar").find('em:first').addClass("glyphicon-plus");
+}(window.jQuery);
+
+
+</script>
+
+
+</html>
+
