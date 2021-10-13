@@ -48,6 +48,7 @@ namespace Ntlink33
                 {
                     rfc = Session["RGVRFC"].ToString();
                     correo = Session["UserNameRGV"].ToString();
+                    lblUsuario.Text = correo;
                 }
                 catch (Exception ex)
                 {

@@ -752,8 +752,7 @@ namespace ServicioLocalWeb
                     }
                 }
             }
-           
-                        
+                                   
             
             Comprobante cfd = NtLinkFactura.GeneraCfd(fac, enviar, complementosF);
             resul.resultado = false;
@@ -947,7 +946,8 @@ namespace ServicioLocalWeb
             catch (Exception ee)
             {
                 Logger.Error(ee);
-                return null;
+                //return null;
+                throw;
             }
         }
 

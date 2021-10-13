@@ -7,9 +7,17 @@
         <h3>NTLINK COMUNICACIONES</h3>
        
     </div>
+      
+
+
+   
+
+
          <div class="container-fluid" style="background-color:white;height: 400px;">
 
              <img id="imagen" src="Imagen/nominaInicio.png" class="img-fluid"    >
   
     </div>
+    
+
 </asp:Content>

@@ -11,7 +11,7 @@
     left: 50%;
     transform: translate(-50%,-50%);
     background: #000;
-    filter: blur(10px) contrast(20);
+    filter: blur(2px) contrast(100%);
 }
 
 .blob-1, .blob-2 {
@@ -19,7 +19,7 @@
     height: 70px;
     position: absolute;
     background: #b2b2b2;
-    border-radius: 50%;
+    border-radius: 10%;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -33,7 +33,7 @@
 .blob-2 {
     left: 80%;
     animation: osc-r 2.5s ease infinite;
-    background: #84BE1A;
+    background: #A8CF38;
 }
 
 @keyframes osc-l {

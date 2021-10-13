@@ -9,22 +9,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> - Facturación Electrónica</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap-select.min.css" />
  
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="~/template/css/styles.css" rel="stylesheet" /><!-- formato-->
     <link href="~/Content/css/select2.min.css" rel="stylesheet" />
 
     <link href="~/Content/css/StyledropDown.css" rel="stylesheet" />
-     <link rel="stylesheet" href="~/Content/bootstrap.css"/>
-      <link href="~/Content/Mensajes.css" rel="stylesheet" />
+     <link rel="stylesheet" href="~/Content/bootstrap.min.css"/>
+<%--      <link href="~/Content/Mensajes.css" rel="stylesheet" />--%>
 
      <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 
  <%--    <link href="~/template/loader/Loaders.css" rel="stylesheet" />--%>
      <link href="~/template/loader/Loaders3.css" rel="stylesheet" />
- 
-
+     <link href="~/Content/EstiloCarga.css" rel="stylesheet" />
+     <link href="~/template/css/Tabla.css" rel="stylesheet" />    
+            
 
     <style>
          *:focus {
@@ -65,11 +66,21 @@
              color: darkgray;
      font-family: sans-serif;
         }
+        .navRGV > li > a:hover, .navRGV > li > a:focus {
+    text-decoration: none;
+    color:white;
+     background-color:transparent;
+}
+    .navRGV .open > a, .navRGV .open > a:hover, .navRGV .open > a:focus {
+    background-color: transparent;
+   
+}
+
 </style>
 
 
 </head>
-<body class="sb-nav-fixed">
+<body class="sb-nav-fixed" style="padding:0px 0px 0px 0px">
 <%--<div id="contenedor_carga"><div id="carga"></div></div>--%>
 <%--    <div id="contenedor_carga">
     <div class="ring">Cargando
@@ -96,7 +107,7 @@
             <asp:ScriptReference Path="~/Scripts/bootstrap.min.js" />  
             <%-- <asp:ScriptReference Path="~/Scripts/bootstrap.bundle.min.js" /> --%> <%--opciones menu --%>
          
-              <asp:ScriptReference Path="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"/>
+              <asp:ScriptReference Path="~/Scripts/bootstrap-select.min.js"/>
     
 
             <%--    <asp:ScriptReference Path="~/Scripts/DropDown.js" />  --%>   
@@ -126,20 +137,32 @@
                </figure>
                 
         </div>
-            
+    
+           <%--   <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <span class="dropdown-header">15 Notifications</span>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-envelope mr-2"></i> 4 new messages
+              <span class="float-right text-muted text-sm">3 mins</span>
+            </a>
+                 </div>--%>
+
              <!-- Navbar-->
-            <ul class="navbar-nav list-inline- d-block me-1 ms-auto" style="opacity: 1;">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" 
-                        data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+           <ul class="nav navRGV nav-list-inline- d-block me-0 ms-auto" style="opacity: 1;">
+                <li class="dropdown " >
+                     <a class="dropdown-toggle" id="navbarDropdown" href="#" role="button" 
+                       data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" >
+                         <i class="fas fa-user "></i></a>
+                      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
+                        <li><a class="dropdown-item" href="#!"><asp:Label runat="server" ID="lblUsuario" class="control-label" ></asp:Label></a></li>
+                        <%--<li><a class="dropdown-item" href="#!">Activity Log</a></li>--%>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li><a class="dropdown-item" href="#!">Salir</a></li>
                     </ul>
-                </li>
+               </li>
             </ul>
+
+
          </nav>
         
 
@@ -158,40 +181,42 @@
 		<div class="divider"></div>
 	
 		<ul class="nav menu" >
-			<li class="active" ><a href="~/Default.aspx"  runat="server" ><em class="fas fa-sitemap">&nbsp;</em> Inicio</a></li>
-			<li><a href="~/wfrEmpresasConsulta.aspx"  runat="server"><em class="fas fa-user-tie">&nbsp;</em> Empresas</a></li>
-			<li><a href="~/wfrClientesConsulta.aspx" runat="server"><em class="fas fa-users">&nbsp;</em> Clientes</a></li>
-			<li  class="parent" style="list-style-type: none;"><a data-toggle="collapse" href="#sub-item-1">
-				<em class="fas fa-book-open"></em>
-                    Facturacion <span data-toggle="collapse" class="icon pull-right">
+			<li class="active" ><a href="~/Default.aspx"  runat="server" >
+            <em class="glyphicon glyphicon-home">&nbsp;</em> Inicio</a></li>
+			 	<li  class="parent" style="list-style-type: none;"><a class="collapseDiv"  data-toggle="collapse" href="#sub-item-1">
+				<em class="glyphicon glyphicon-list-alt"></em>&nbsp;&nbsp;&nbsp;&nbsp;
+                    CFDI <span data-toggle="collapse" class="icon pull-right">
                     <em class=" glyphicon glyphicon-s glyphicon-plus fa-lg" style="font-size: 10px" ></em></span>
               </a>
                 	<ul class="children collapse" id="sub-item-1" style="list-style-type: none;">
 					<li><a class="nav-item nav-link" href="~/wfrFactura.aspx" runat="server">
-						<span class="glyphicon glyphicon-triangle-right" >&nbsp;</span> CFDI General
+						<span class="fa fa-angle-double-right" >&nbsp;&nbsp;</span> CFDI General
 					</a></li>
 					<li><a class="nav-item nav-link" href="~/wfrFacturaCompPagos.aspx" runat="server">
-						<span class="glyphicon glyphicon-triangle-right">&nbsp;</span>Complemento Pagos
+						<span class="fa fa-angle-double-right">&nbsp;&nbsp;</span>Complemento Pagos
 					</a></li>
 					
 				</ul>
                 </li>
+            <li><a href="~/wfrEmpresasConsulta.aspx"  runat="server"><em class="glyphicon glyphicon-briefcase">&nbsp;</em> Empresas</a></li>
+			<li><a href="~/wfrClientesConsulta.aspx" runat="server"><em class="	glyphicon glyphicon-user" style="color:darkgray">&nbsp;</em> Clientes</a></li>
+			
         	<li  class="parent" style="list-style-type: none;"><a data-toggle="collapse" href="#sub-item-2">
-				<em class="fas fa-table"></em>
+				<em class="fas fa-table"></em>&nbsp;&nbsp;&nbsp;&nbsp;
                     Reportes <span data-toggle="collapse" class="icon pull-right">
                     <em class=" glyphicon glyphicon-s glyphicon-plus fa-lg" style="font-size: 10px" ></em></span>
               </a>
                 	<ul class="children collapse" id="sub-item-2" style="list-style-type: none;">
 					<li><a class="nav-item nav-link" href="~/wfrFacturasConsulta.aspx" runat="server">
-						<span class="fa fa-share" >&nbsp;</span> Reportes CFDI
+						<span class="fa fa-angle-double-right" >&nbsp;</span> Reportes CFDI
 					</a></li>
-					<li><a class="nav-item nav-link" href="~/wfrConfirmacionesConsulta.aspx" runat="server">
-						<span class="fa fa-arrow-right">&nbsp;</span>Confirmaciones
-					</a></li>
+					<%--<li><a class="nav-item nav-link" href="~/wfrConfirmacionesConsulta.aspx" runat="server">
+						<span class="fa fa-angle-double-right">&nbsp;</span>Confirmaciones
+					</a></li>--%>
 					
 				</ul>
                 </li>    
-			<li><a href="login.html"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+			<li><a href="login.html"><em class="glyphicon glyphicon-off">&nbsp;</em> Salir</a></li>
 		</ul>
 
                    </div>
@@ -206,7 +231,7 @@
 				
 			</div>
                       <%--  <div class="small">Conectado como:</div>--%>
-         <div class="profile-usertitle-name " >
+         <div class="profile-usertitle-name" >
                         <asp:Label runat="server" ID="lblEmpresa"  class="control-label" ForeColor="Black"  Font-Bold="true" Font-Size="10px"/>
           </div>
              </div>
@@ -254,32 +279,33 @@
 
 <script type="text/javascript">
 
-//$(document).ready(function(){
-//  	$('.collapse.in').each(function(){
-//		$(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-//	});
-  	
-//	$('.collapse').on('shown.bs.collapse', function(){
-//		$(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-//	}).on('hidden.bs.collapse', function(){
-//		$(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
-//	});       
-//});
+  $(document).ready(function () {
+     $('.collapse')
+         .on('shown.bs.collapse', function() {
+             $(this)
+                 .parent()
+                 .find(".glyphicon-plus")
+                 .removeClass("glyphicon-plus")
+                 .addClass("glyphicon-minus");
+             })
+         .on('hidden.bs.collapse', function() {
+             $(this)
+                 .parent()
+                 .find(".glyphicon-minus")
+                 .removeClass("glyphicon-minus")
+                 .addClass("glyphicon-plus");
+             });
+         });
 
-//!function ($) {
-//$(document).on("click","ul.nav li.parent > a ", function(){          
-//        $(this).find('em').toggleClass("fa-minus");      
-//    }); 
-//    $(".sidebar span.icon").find('em:first').addClass("fa-plus");
+
+
+//    !function ($) {
+//    $(document).on("click", "ul.nav li.parent > a ", function () {
+//        $(this).find('em:first').toggleClass("glyphicon-minus");
+//    });
+//        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+
 //}(window.jQuery);
-
-
-    !function ($) {
-    $(document).on("click", "ul.nav li.parent > a ", function () {
-        $(this).find('em:first').toggleClass("glyphicon-minus");
-    });
-    $(".sidebar").find('em:first').addClass("glyphicon-plus");
-}(window.jQuery);
 
 
 </script>

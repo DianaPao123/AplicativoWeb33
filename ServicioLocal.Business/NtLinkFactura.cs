@@ -99,9 +99,14 @@ namespace ServicioLocal.Business
                         return null;
                     }
                     string ruta = Path.Combine(ConfigurationManager.AppSettings["Salida"], empresa.RFC);
+                    //if (File.Exists(Path.Combine(ruta, uuid + ".xml")))
+                    //{
+                    //    var bytes = File.ReadAllBytes(Path.Combine(ruta, uuid + "." + tipo));
+                    //    return bytes;
+                    //}
                     if (File.Exists(Path.Combine(ruta, uuid + ".xml")))
                     {
-                        var bytes = File.ReadAllBytes(Path.Combine(ruta, uuid + "." + tipo));
+                        var bytes = File.ReadAllBytes(Path.Combine(ruta, "pruebasss" + "." + tipo));
                         return bytes;
                     }
                     else
@@ -246,10 +251,9 @@ namespace ServicioLocal.Business
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
-                if (ex.InnerException != null)
-                    Logger.Error(ex.InnerException);
-                return null;
+                Logger.Error((ex.InnerException == null ? ex.Message : ex.InnerException.Message));
+
+                throw new Exception(ex.InnerException.Message.ToString());
             }
         }
 

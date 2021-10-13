@@ -1626,7 +1626,7 @@ namespace ServicioLocal.Business
                 }
                 if (timbreString == null)
                 {
-                    throw new Exception("Ocurrió un error en el timbrado");
+                    throw new Exception("Ocurrió un error en el Servicio timbrado");
                 }
                 GeneradorCadenasTimbre generadorCadenasTimbre = new GeneradorCadenasTimbre();
                 comp.CadenaOriginalTimbre = generadorCadenasTimbre.CadenaOriginal(timbreString);

@@ -16,7 +16,7 @@
     <RootNamespace>Ntlink33</RootNamespace>
     <AssemblyName>Ntlink33</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -48,6 +48,9 @@
   <ItemGroup>
     <Reference Include="AjaxControlToolkit, Version=20.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <HintPath>..\packages\AjaxControlToolkit.20.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\..\NtLinkSitiosWeb3.3Gratuito\NTlink\GafLookPaid\bin\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -116,6 +119,7 @@
     <Content Include="Content\bootstrap-icons.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-select.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -124,9 +128,11 @@
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\select2.min.css" />
     <Content Include="Content\css\StyledropDown.css" />
+    <Content Include="Content\EstiloCarga.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Mensajes.css" />
+    <Content Include="Content\Paginacion.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
@@ -142,7 +148,9 @@
     <Content Include="Imagen\processed %282%29.ico" />
     <Content Include="Imagen\processed.ico" />
     <Content Include="Imagen\Sat.png" />
+    <Content Include="PDF.aspx" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -249,7 +257,15 @@
     <Content Include="template\login\bootstrap3_4.min.css" />
     <Content Include="template\login\bootstrap4_3.min.css" />
     <Content Include="template\login\login.css" />
+    <Content Include="wfrClientes.aspx" />
+    <Content Include="wfrClientesConsulta.aspx" />
+    <Content Include="wfrConceptos.aspx" />
+    <Content Include="wfrEmpresa.aspx" />
+    <Content Include="wfrEmpresasConsulta.aspx" />
+    <Content Include="wfrFacturaCompPagos.aspx" />
     <Content Include="wfrFactura.aspx" />
+    <Content Include="wfrFactura3.aspx" />
+    <Content Include="wfrFacturasConsulta.aspx" />
     <Content Include="wfrLogin.aspx" />
     <Content Include="Scripts\index.js.flow" />
     <Content Include="Scripts\esm\popper.min.js.map" />
@@ -258,23 +274,28 @@
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-reboot.min.css.map" />
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="fonts\fontawesome-webfont.woff2" />
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="wfrSucursales.aspx" />
+    <Content Include="wfrSucursalesConsulta.aspx" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -345,6 +366,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="PDF.aspx.cs">
+      <DependentUpon>PDF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PDF.aspx.designer.cs">
+      <DependentUpon>PDF.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -367,6 +395,48 @@
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
+    <Compile Include="wfrClientes.aspx.cs">
+      <DependentUpon>wfrClientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrClientes.aspx.designer.cs">
+      <DependentUpon>wfrClientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrClientesConsulta.aspx.cs">
+      <DependentUpon>wfrClientesConsulta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrClientesConsulta.aspx.designer.cs">
+      <DependentUpon>wfrClientesConsulta.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrConceptos.aspx.cs">
+      <DependentUpon>wfrConceptos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrConceptos.aspx.designer.cs">
+      <DependentUpon>wfrConceptos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrEmpresa.aspx.cs">
+      <DependentUpon>wfrEmpresa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrEmpresa.aspx.designer.cs">
+      <DependentUpon>wfrEmpresa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrEmpresasConsulta.aspx.cs">
+      <DependentUpon>wfrEmpresasConsulta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrEmpresasConsulta.aspx.designer.cs">
+      <DependentUpon>wfrEmpresasConsulta.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrFacturaCompPagos.aspx.cs">
+      <DependentUpon>wfrFacturaCompPagos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrFacturaCompPagos.aspx.designer.cs">
+      <DependentUpon>wfrFacturaCompPagos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="wfrFactura.aspx.cs">
       <DependentUpon>wfrFactura.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -374,12 +444,40 @@
     <Compile Include="wfrFactura.aspx.designer.cs">
       <DependentUpon>wfrFactura.aspx</DependentUpon>
     </Compile>
+    <Compile Include="wfrFactura3.aspx.cs">
+      <DependentUpon>wfrFactura3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrFactura3.aspx.designer.cs">
+      <DependentUpon>wfrFactura3.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrFacturasConsulta.aspx.cs">
+      <DependentUpon>wfrFacturasConsulta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrFacturasConsulta.aspx.designer.cs">
+      <DependentUpon>wfrFacturasConsulta.aspx</DependentUpon>
+    </Compile>
     <Compile Include="wfrLogin.aspx.cs">
       <DependentUpon>wfrLogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wfrLogin.aspx.designer.cs">
       <DependentUpon>wfrLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrSucursales.aspx.cs">
+      <DependentUpon>wfrSucursales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrSucursales.aspx.designer.cs">
+      <DependentUpon>wfrSucursales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wfrSucursalesConsulta.aspx.cs">
+      <DependentUpon>wfrSucursalesConsulta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wfrSucursalesConsulta.aspx.designer.cs">
+      <DependentUpon>wfrSucursalesConsulta.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -400,6 +498,10 @@
     <ProjectReference Include="..\CatalogosSAT\CatalogosSAT.csproj">
       <Project>{383b6985-0e07-4c91-8b07-e4b928962fe0}</Project>
       <Name>CatalogosSAT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServicioLocal.Business\ServicioLocal.Business.csproj">
+      <Project>{0e778f49-1e4b-4441-8e14-8836058889cb}</Project>
+      <Name>ServicioLocal.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\ServivioLocalContract\ServicioLocalContract.csproj">
       <Project>{ee39ad87-b692-418e-be59-856f640404df}</Project>
@@ -428,7 +530,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1095</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1095/</IISUrl>
+          <IISUrl>http://localhost/Ntlink33</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

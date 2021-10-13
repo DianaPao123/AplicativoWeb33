@@ -8,11 +8,12 @@ using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace GafLookPaid
+namespace Ntlink33
 {
     public partial class wfrFactura : Page
     {
@@ -31,8 +32,8 @@ namespace GafLookPaid
                 trDonativo.Visible = false;
                 try
                 {
-                    DivCfdiRelacionados.Attributes.Add("style", "display:none;");
-                    DivImpuestos.Attributes.Add("style", "display:none;");
+                    //DivCfdiRelacionados.Attributes.Add("style", "display:none;");
+                    //DivImpuestos.Attributes.Add("style", "display:none;");
 
                     var perfil = Session["perfil"] as string;
                     var sistema = Session["idSistema"] as long?;
@@ -46,8 +47,8 @@ namespace GafLookPaid
 
                         this.ddlEmpresa.DataSource = listaEmpresas;
                         this.ddlEmpresa.DataBind();
-                        this.ddlEmpresaE.DataSource = listaEmpresas;
-                        this.ddlEmpresaE.DataBind();
+                       // this.ddlEmpresaE.DataSource = listaEmpresas;
+                       // this.ddlEmpresaE.DataBind();
 
 
                         int idEmpresa = idEmpresaE = listaEmpresas.First().IdEmpresa;
@@ -261,7 +262,7 @@ namespace GafLookPaid
             BindDetallesImpuestosToGridView();
             //-----------------------------------------------------------------------
             this.UpdateTotales();
-            if (cbImpuestos.Checked == true)
+            //if (cbImpuestos.Checked == true)
                 ActImpuestos();
 
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop",
@@ -274,116 +275,130 @@ namespace GafLookPaid
         protected void btnGenerarFactura_Click(object sender, EventArgs e)
         {
 
-            mpexFac.Show();
+           // mpexFac.Show();
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                           "$('#MainContent_ModalConfirmar').modal('show'); "+
+                                "$('body').css('padding-right', '0px'); ", true);
 
-        }
+          }
 
         private void GuardarFactura()
         {
+            //Thread.Sleep(5000);
+
             bool error = false;
-            if (ValidarFactura())
+            if (!ValidarFactura())
             {
-                var detalles = ViewState["detalles"] as List<facturasdetalle>;
+                btnGenerarFactura.Enabled = true;
+
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                       "$('#MainContent_ModalError').modal('show') ", true);
+                return;
+            }
+
+            var detalles = ViewState["detalles"] as List<facturasdetalle>;
                 var iniciales = Session["iniciales"] as string;
                 var fact = GetFactura(iniciales, detalles);
-                try
+            try
+            {
+                var clienteServicio = NtLinkClientFactory.Cliente();
+                int idCliente = int.Parse(this.ddlClientes.SelectedValue);
+                clientes c = clienteServicio.ObtenerClienteById(idCliente);
+                using (clienteServicio as IDisposable)
                 {
-                    var clienteServicio = NtLinkClientFactory.Cliente();
-                    int idCliente = int.Parse(this.ddlClientes.SelectedValue);
-                    clientes c = clienteServicio.ObtenerClienteById(idCliente);
-                    using (clienteServicio as IDisposable)
+                    List<facturasdetalle33> fact33 = new List<facturasdetalle33>();
+                    foreach (var de in detalles)
                     {
-                        List<facturasdetalle33> fact33 = new List<facturasdetalle33>();
-                        foreach (var de in detalles)
-                        {
-                            facturasdetalle33 f33 = new facturasdetalle33();
-                            f33.ConceptoRetenciones = de.ConceptoRetenciones;
-                            f33.ConceptoTraslados = de.ConceptoTraslados;
-                            f33.ConceptoClaveProdServ = de.Codigo;
-                            f33.partida = de.Partida.ToString();
-                            fact33.Add(f33);
-                        }
-                        var ss = clienteServicio.GuardarFactura33(fact, detalles, fact33, true, null, null);
-                        if (!ss.resultado)
-                        {
-                            this.lblError.Text = "* Error al generar la factura";
-                            mpMensajeError.Show();
-                            //UpdatePanel7.Update();
-
-                            btnGenerarFactura.Enabled = true;
-                            return;
-                        }
+                        facturasdetalle33 f33 = new facturasdetalle33();
+                        f33.ConceptoRetenciones = de.ConceptoRetenciones;
+                        f33.ConceptoTraslados = de.ConceptoTraslados;
+                        f33.ConceptoClaveProdServ = de.Codigo;
+                        f33.partida = de.Partida.ToString();
+                        fact33.Add(f33);
+                    }
+                    var ss = clienteServicio.GuardarFactura33(fact, detalles, fact33, true, null, null);
+                    //if (!ss.resultado)
+                    //{
+                    //    this.lblError.Text = "* Error al generar la factura";
+                    //    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                    //    "$('#MainContent_ModalError').modal('show') ", true);
+                    //    btnGenerarFactura.Enabled = true;
+                    //    return;
+                    //}
+                    if (ss.resultado)
+                    {
                         this.lblError.Text = string.Empty;
                         Session["UUDINuevo"] = "";
                         string x = ss.UUDI;
                         Session["UUDINuevo"] = x;
+
+                        this.ClearAll();
+                        UpdatePanelR2.Update();
+                        UpdatePanelR4.Update();
+                        UpdatePanelR8.Update();
+                        UpdatePanelR10.Update();
+                        UpdatePanelR9.Update();
                     }
-                    this.ClearAll();
+                    else
+                        error = true;
                 }
-                catch (FaultException ae)
+
+            }
+            catch (FaultException ae)
+            {
+                error = true;
+                this.lblError.Text = ae.Message;
+            }
+            catch (ApplicationException ae)
+            {
+                error = true;
+                //Logger.Error(ae.Message);
+                if (ae.InnerException != null)
                 {
-                    error = true;
-                    this.lblError.Text = ae.Message;
+                    //Logger.Error(ae.InnerException.Message);
                 }
-                catch (ApplicationException ae)
+                this.lblError.Text = ae.Message;
+            }
+            catch (Exception ae)
+            {
+                error = true;
+                //Logger.Error(ae.Message);
+                if (ae.InnerException != null)
                 {
-                    error = true;
-                    //Logger.Error(ae.Message);
-                    if (ae.InnerException != null)
-                    {
-                        //Logger.Error(ae.InnerException.Message);
-                    }
-                    this.lblError.Text = ae.Message;
+                    //Logger.Error(ae.InnerException.Message);
                 }
-                catch (Exception ae)
-                {
-                    error = true;
-                    //Logger.Error(ae.Message);
-                    if (ae.InnerException != null)
-                    {
-                        //Logger.Error(ae.InnerException.Message);
-                    }
-                    this.lblError.Text = "Error al generar el comprobante:" + ae.Message;
-                }
+                this.lblError.Text = "Error al generar el comprobante:" + ae.Message;
+            }
                 if (!error)
                 {
                     this.lblOK2.Text = "Comprobante generado correctamente  y enviado por correo electrónico";
 
                     ActualizarSaldosMaster();
-
-                    mpMensajeOK2.Show();
-                   // UpdatePanel7.Update();
-
-                    //this.Page.Response.Write("<script language='JavaScript'>window.alert('Comprobante generado');</script>");
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                    "$('#MainContent_ModalOK').modal('show') ", true);
+                    
                 }
                 else
                 {
                     btnGenerarFactura.Enabled = true;
-                    // this.lblError.Text = string.Empty;
-                    mpMensajeError.Show();
-                    //UpdatePanel7.Update();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                     "$('#MainContent_ModalError').modal('show') ", true);
 
                 }
-            }
-            else
-                btnGenerarFactura.Enabled = true;
-
-           // UpdateProgress2.Dispose();
-           // ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "HideImage();", true);
            
         }
 
 
         private void Clear()
         {
-            this.txtCodigo.Text = this.txtDescripcion.Text = this.txtPrecio.Text =
+            this.txtCodigo.Text = this.txtDescripcion.Text = this.txtPrecio.Text =this.txtDetalles.Text= txtCuentaPredial.Text=
                 this.txtCantidad.Text = txtNoIdentificacion.Text = txtDescuento.Text = txtUnidad.Text = string.Empty;
         }
 
         private void ClearAll()
         {
             this.Clear();
-            cbImpuestos.Visible = false;
+           // cbImpuestos.Visible = false;
             this.txtProyecto.Text =
               /*  this.txtFolioOriginal.Text = this.txtFechaOriginal.Text = this.txtMontoOriginal.Text = */
                 this.txtFolioSat.Text =
@@ -421,14 +436,14 @@ namespace GafLookPaid
                 this.txtFolioSat.Text = txtFolio.Text;
 
             }
-            cbImpuestos.Checked = false;
-            cbCfdiRelacionados.Checked = false;
+            //cbImpuestos.Checked = false;
+            //cbCfdiRelacionados.Checked = false;
             ddlIVA.SelectedValue = "-1";
             ddlRISR.SelectedValue = "-1";
             ddlRIVA.SelectedValue = "-1";
-            DivCfdiRelacionados.Attributes.Add("style", "display:none;");
-            DivImpuestos.Attributes.Add("style", "display:none;");
-
+           // DivCfdiRelacionados.Attributes.Add("style", "display:none;");
+           // DivImpuestos.Attributes.Add("style", "display:none;");
+            
         }
 
         private bool Validar()
@@ -500,18 +515,18 @@ namespace GafLookPaid
             }
         }
 
-        protected void cbCfdiRelacionados_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbCfdiRelacionados.Checked == true)
-            {
-                DivCfdiRelacionados.Attributes.Add("style", "display:block;");
-            }
-            else
-            {
-                DivCfdiRelacionados.Attributes.Add("style", "display:none;");
+        //protected void cbCfdiRelacionados_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (cbCfdiRelacionados.Checked == true)
+        //    {
+        //        DivCfdiRelacionados.Attributes.Add("style", "display:block;");
+        //    }
+        //    else
+        //    {
+        //        DivCfdiRelacionados.Attributes.Add("style", "display:none;");
 
-            }
-        }
+        //    }
+        //}
         protected void gvCfdiRelacionado_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             LinkButton lb = e.Row.FindControl("gvlnkDelete") as LinkButton;
@@ -636,8 +651,10 @@ namespace GafLookPaid
         protected void lnkDeleteFac_Click(object sender, EventArgs e)
         {
             btnGenerarFactura.Enabled = false;
-            mpexFac.Hide();
-            up1.Update();
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop",
+                "$('#MainContent_ModalConfirmar').modal('hide');", true);
+            //mpexFac.Hide();
+            //up1.Update();
             this.GuardarFactura();
             btnGenerarFactura.Enabled = true;
 
@@ -645,41 +662,14 @@ namespace GafLookPaid
         }
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
-            //txtRFCBus.Text = "";
+                    
+           ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                " document.getElementById('" + txtRFCBus.ClientID + "').value = '';" +
+                      "$('#MainContent_ModalBuscarRFC').modal('show') ", true);
 
-            // ModalBuscar.Show();
-            // UpdatePanel7.Update();
-
-          //   ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Modal", "$('#MainContent_ModalRFC').modal();", true);
-            // ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "< script >$('#MainContent_ModalRFC').modal('show');</ script > ", false);
-
-
-            //  ModalPopupRFC.Show();
-
-            // UpdatePanel7.Update();
-
-
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
-                 " document.getElementById('" + txtRFCBus.ClientID + "').value = '';" +
-                       "$('#MainContent_ModalBuscarRFC').modal('show') ", true);
+   
         }
-        protected void btnSubmit_Click(object sender, EventArgs e)
-        {
-            lblModalTitle.Text = "Validation Errors List for HP7 Citation";
-            lblModalBody.Text = "This is modal body";
-            // ScriptManager.RegisterStartupScript(Page, Page.GetType(), "myModal", "carga()", true);
 
-            // ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#myModal').modal();", true);
-            //   ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#myModal').modal('show');</script>", false);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "myFunction", "$(function () {$('#myModal').modal();})", true);
-            // ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowPopup", "$('#myModal').modal('show')", true);
-
-           // ModalPopupRFC.Show();
-            //up1.Update();
-           // UpdatePanel7.Update();
-
-
-        }
         protected void btnBuscarRFC_Click(object sender, EventArgs e)
         {
           
@@ -704,6 +694,8 @@ namespace GafLookPaid
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop",
                  "$('#MainContent_ModalBuscarRFC').modal('hide');", true);
 
+
+
         }
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
@@ -720,8 +712,10 @@ namespace GafLookPaid
             {
 
                 lblError.Text = "Seleccione cliente";
-                mpMensajeError.Show();
+                // mpMensajeError.Show();
                 //UpdatePanel7.Update();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+              "$('#MainContent_ModalError').modal('show') ", true);
 
                 return;
             }
@@ -732,8 +726,10 @@ namespace GafLookPaid
 
                 //Error.Show();
                 this.lblError.Text = "* No se ha seleccionado un cliente";
-                mpMensajeError.Show();
+                //mpMensajeError.Show();
                 //UpdatePanel7.Update();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+              "$('#MainContent_ModalError').modal('show') ", true);
 
                 return;
             }
@@ -747,16 +743,21 @@ namespace GafLookPaid
 
             {
                 this.lblError.Text = "* Error de validación en la partida";
-                mpMensajeError.Show();
+                //  mpMensajeError.Show();
                 //UpdatePanel7.Update();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+              "$('#MainContent_ModalError').modal('show') ", true);
 
                 return;
             }
+
             if ((txtCodigo.Text == "80111701" && ddlRIVA.SelectedValue != "0.060000") || (txtCodigo.Text != "80111701" && ddlRIVA.SelectedValue == "0.060000"))
             {
                 this.lblError.Text = "* Error de validación en la partida, el codigo 80111701 equivale a 6%";
-                mpMensajeError.Show();
-              //  UpdatePanel7.Update();
+                //   mpMensajeError.Show();
+                //  UpdatePanel7.Update();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                "$('#MainContent_ModalError').modal('show') ", true);
 
                 return;
 
@@ -825,7 +826,7 @@ namespace GafLookPaid
             //  Impuestos.ClaveConcepto = this.txtCodigo.Text;
             //  Impuestos.AltaClaveConcepto();
 
-            cbImpuestos.Enabled = true;
+            //cbImpuestos.Enabled = true;
             
             //---------------------------------------
             if (ddlIVA.SelectedValue != "-1")
@@ -850,26 +851,20 @@ namespace GafLookPaid
             }
             if (ddlIVA.SelectedValue!= "-1" || ddlRISR.SelectedValue != "-1" || ddlRISR.SelectedValue != "-1")
             {
-                cbImpuestos.Checked = true;
+                //cbImpuestos.Checked = true;
                 #region Impuestos
-               
+
                 #endregion
                 //cbIVA.Checked = true;
                 //ddlIVA.Enabled = true;
                 //cbRISR.Checked = false;
                 //cbRIVA.Checked = false;
                 //ddlRIVA.Enabled = false;
-
-            }
-
-
-            if (cbImpuestos.Checked == true)
-            {
-                DivImpuestos.Attributes.Add("style", "display:block;");
-
                 ActImpuestos();
             }
 
+
+          
 
 
             //-------
@@ -977,7 +972,7 @@ namespace GafLookPaid
 
             this.lblTotal.Text = total.ToString("C", cul);
             this.lblSubtotal.Text = subtotal.ToString("C", cul);
-            UpdatePanel4.Update();
+            UpdatePanelR10.Update();
         }
 
 
@@ -987,19 +982,7 @@ namespace GafLookPaid
 
         }
 
-        protected void cbImpuestos_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbImpuestos.Checked == true)
-            {
-                DivImpuestos.Attributes.Add("style", "display:block;");
-                ActImpuestos();
-            }
-            else
-            {
-                DivImpuestos.Attributes.Add("style", "display:none;");
-
-            }
-        }
+      
         private void BindDetallesImpuestosToGridView()
         {
             List<facturasdetalleRT> detallesImpuestos2 = ViewState["detallesImpuestos"] as List<facturasdetalleRT>;
@@ -1134,10 +1117,13 @@ namespace GafLookPaid
             else
             {
                 this.lblError.Text = "*Impuesto ya agregado";
-                mpMensajeError.Show();
+                //mpMensajeError.Show();
                 //UpdatePanel7.Update();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+              "$('#MainContent_ModalError').modal('show') ", true);
+
             }
-         
+
 
         }
 
@@ -1432,7 +1418,7 @@ namespace GafLookPaid
                 descuento1 = descuento1 - desc;
                 ViewState["descuento"] = descuento1;
                 UpdateTotales();
-                if (cbImpuestos.Checked == true)
+                //if (cbImpuestos.Checked == true)
                 {
                     ActImpuestos();
                 }
@@ -1560,18 +1546,14 @@ namespace GafLookPaid
             if ((ViewState["detalles"] as List<facturasdetalle>).Count == 0)
             {
 
-                this.lblError.Text = "La factura no puede estar vacía";
-                mpMensajeError.Show();
-                //UpdatePanel7.Update();
+                this.lblError.Text = "La factura no puede estar vacía, agregar partida.";
 
                 return false;
             }
             if (string.IsNullOrEmpty(this.txtFolio.Text))
             {
-                this.lblError.Text = "Escribe el folio de la factura";
-                mpMensajeError.Show();
-                //UpdatePanel7.Update();
-
+                this.lblError.Text = "Escribe el folio de la factura.";
+                
                 return false;
             }
             if (txtFechaPago.Visible && !string.IsNullOrEmpty(txtFechaPago.Text))
@@ -1579,16 +1561,12 @@ namespace GafLookPaid
                 var fecha = DateTime.ParseExact(txtFechaPago.Text, "dd/MM/yyyy", new CultureInfo("es-MX"));
                 if (fecha > DateTime.Now)
                 {
-                    this.lblError.Text = "La fecha de pago de la factura esta fuera de rango";
-                    mpMensajeError.Show();
-                    //UpdatePanel7.Update();
+                    this.lblError.Text = "La fecha de pago de la factura esta fuera de rango.";
                     return false;
                 }
                 if (fecha.Year != DateTime.Now.Year)
                 {
-                    this.lblError.Text = "La fecha de pago de la factura esta fuera de rango";
-                    mpMensajeError.Show();
-                    //UpdatePanel7.Update();
+                    this.lblError.Text = "La fecha de pago de la factura esta fuera de rango.";
                     return false;
                 }
             }
@@ -1596,18 +1574,14 @@ namespace GafLookPaid
             {
                 if (string.IsNullOrEmpty(txtDonatAutorizacion.Text))
                 {
-                    this.lblError.Text = "Escribe el número de autorización del donativo";
-                    mpMensajeError.Show();
-                    //UpdatePanel7.Update();
-
+                    this.lblError.Text = "Escribe el número de autorización del donativo.";
+          
                     return false;
                 }
                 if (string.IsNullOrEmpty(txtDonatFechautorizacion.Text))
                 {
-                    this.lblError.Text = "Escribe la fecha de autorización del donativo";
-                    mpMensajeError.Show();
-                    //UpdatePanel7.Update();
-
+                    this.lblError.Text = "Escribe la fecha de autorización del donativo.";
+                 
                     return false;
                 }
 
@@ -1620,6 +1594,7 @@ namespace GafLookPaid
                 this.lblError.Text = "Falta agregar el #Cuenta o # Tarjeta. ";
                 return false;
             }*/
+
             return true;
         }
 
@@ -1627,9 +1602,14 @@ namespace GafLookPaid
 
         protected void BtnVistaPreviaP_Click(object sender, EventArgs e)
         {
-           // UpdatePanel7.Update();
+            // UpdatePanel7.Update();
             if (!ValidarFactura())
+            {
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                "$('#MainContent_ModalError').modal('show') ", true);
+
                 return;
+            }
 
             var pdf = Preview();
 
@@ -1638,17 +1618,18 @@ namespace GafLookPaid
                 if (string.IsNullOrEmpty(this.lblError.Text))
 
                     this.lblError.Text = "Error al generar vista previa";
-                mpMensajeError.Show();
-                //UpdatePanel7.Update();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                    "$('#MainContent_ModalError').modal('show') ", true);
+
+
 
                 return;
             }
             else
             {
 
-                  this.lblOK.Text = "Comprobante Previo generado correctamente";
-                // ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "HideImage();", true);
-                 mpMensajeOK.Show();
+                 // this.lblOK.Text = "Comprobante Previo generado correctamente";
+                 //  mpMensajeOK.Show();
                 // UpdatePanel7.Update();
 
                 Session["cacheKey"] = pdf;
@@ -1701,8 +1682,11 @@ namespace GafLookPaid
                     if (pdf == null)
                     {
                         this.lblError.Text = "* Error al generar la factura";
-                        mpMensajeError.Show();
-                       // UpdatePanel7.Update();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                       "$('#MainContent_ModalError').modal('show') ", true);
+
+                        //mpMensajeError.Show();
+                        // UpdatePanel7.Update();
                         return null;
                     }
                     else return pdf;
@@ -1734,11 +1718,15 @@ namespace GafLookPaid
                 this.lblError.Text = "Error al generar el comprobante: " + ae.Message;
 
             }
-            if (!error)
+            if (error)
             {
-                this.lblOK.Text = "Comprobante generado correctamente";
-                mpMensajeOK.Show();
-               // UpdatePanel7.Update();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                "$('#MainContent_ModalError').modal('show') ", true);
+
+
+                // this.lblOK.Text = "Comprobante generado correctamente";
+                // mpMensajeOK.Show();
+                // UpdatePanel7.Update();
                 return null;
             }
             //this.lblError.Text = string.Empty;
@@ -1861,7 +1849,14 @@ namespace GafLookPaid
         protected void btnLimpiar_Click(object sender, EventArgs e)
         {
             // ClearAll();
-            Response.Redirect("wfrFactura.aspx");
+
+            this.ClearAll();
+            UpdatePanelR2.Update();
+            UpdatePanelR4.Update();
+            UpdatePanelR8.Update();
+            UpdatePanelR10.Update();
+            UpdatePanelR9.Update();
+            //Response.Redirect("wfrFactura.aspx");
 
         }
 
@@ -1995,7 +1990,7 @@ namespace GafLookPaid
                 return false;
         }
         //------------------------------------------------------------------------------
-
+        
         protected void Fecha_Sello(int idEmp)
         {
             try
@@ -2012,8 +2007,9 @@ namespace GafLookPaid
                     var sistema = clienteServicio.ObtenerSistemaById((int)empresa.idSistema.Value);
                     string FechaVenceString = empresa.VencimientoCert;
                     //string FechaVenceString = "20/04/2018 12:25:53 p.m.";
-                    lblVencimiento.ForeColor = System.Drawing.Color.Red;//-------->
+                   // lblVencimiento.ForeColor = System.Drawing.Color.Red;//-------->
                     this.lblVencimiento.Text = "Su CSD caduca el dia: " + FechaVenceString;
+                    /*
                     Int32[] FechaVenceInt = new Int32[6];
                     FechaVenceInt[0] = Convert.ToInt32(FechaVenceString.Substring(6, 4));
                     FechaVenceInt[1] = Convert.ToInt32(FechaVenceString.Substring(3, 2));
@@ -2079,15 +2075,16 @@ namespace GafLookPaid
                             ddlEmpresaE.Visible = false;
                             lblpop.Visible = false;
                         }
-                        this.mpeSellos.Show();
-                    }
+                       // this.mpeSellos.Show();
+                       
+                    }*/
                 }
             }
             catch (Exception ex)
             {
             }
         }
-
+        
         protected void ddlTipoComprobante_SelectedIndexChanged(object sender, EventArgs e)
         {
             
@@ -2482,11 +2479,7 @@ namespace GafLookPaid
                     var timbrado = Session["SaldoTimbrado"];
                     var contratos = Session["Contratos"] ?? "0";
 
-                    //Master.labelcontratos.Text = contratos.ToString();
-                    //Master.labelEmision.Text = emision.ToString();
-                    //Master.labeltimbrado.Text = timbrado.ToString();
-                    //Master.panel.Update();
-
+              
                 }
 
 
@@ -2510,23 +2503,38 @@ namespace GafLookPaid
         protected void LinkButton1_Click(object sender, EventArgs e)
         {
 
-            mpMensajeOK2.Hide();
-
+       
+            //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop",
+            //  "$('#MainContent_ModalOK').modal('hide');", true);
+                       
             string uudi = Session["UUDINuevo"].ToString();
-            var cliente = NtLinkClientFactory.Cliente();
+           // string uudi = "E581633B-5889-4D09-B90E-933DA9DEB0701";
+                  var cliente = NtLinkClientFactory.Cliente();
             using (cliente as IDisposable)
             {
-                Response.AddHeader("Content-Disposition", "attachment; filename=" + "_" + uudi + ".pdf");
-                this.Response.ContentType = "application/pdf";
-                var pdf = cliente.FacturaPdf(uudi);
+                 var pdf = cliente.FacturaPdf(uudi);
                 if (pdf == null)
                 {
-                    this.lblError.Text = "Archivo no encontrado";
-                    return;
+                
+
+                    this.lblError.Text = "PDF no encontrado,consulte con el Administrador";
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                      "$('body').css('padding-right', '0px'); "+
+                     "$('#MainContent_ModalError').modal('show') ", true);
+                   
                 }
-                this.Response.BinaryWrite(pdf);
-                this.Response.End();
-                Session["UUDINuevo"] = "";
+                else
+                {
+
+                   
+
+                    Session["cacheKey"] = pdf;
+                    MyIframe.Attributes["src"] = "PDF.aspx";
+
+                    UpdatePanelR100.Update();
+                  
+                    Session["UUDINuevo"] = "";
+                }
             }
         }
 

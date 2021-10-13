@@ -4,10 +4,11 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
+    <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> - Facturación Electrónica</title>
   
 
      <style>
@@ -15,32 +16,6 @@
     outline: 0 !important;
 }
   
-
-
-.Carga
-{
-    position: fixed;
-    z-index: 999;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    filter: alpha(opacity=60);
-    opacity: 0.7;
-    -moz-opacity: 0.8;
-}
-.centrar
-{
-    z-index: 1000;
-    margin: 300px auto;
-    padding: 10px;
-    width: 130px;
-    background-color: White;
-    border-radius: 10px;
-    filter: alpha(opacity=100);
-    opacity: 1;
-    -moz-opacity: 1;
-} 
-
 </style>
          
       <script src="Scripts/jquery-3.3.1.min.js"></script>
@@ -54,6 +29,7 @@
    <link rel="stylesheet" href="~/template/login/login.css"/>   
  
      <link href="~/template/css/Checkbox.css" rel="stylesheet" />
+         <link href="~/Content/EstiloCarga.css" rel="stylesheet" />
 
       <script type="text/javascript">
 
@@ -87,10 +63,10 @@
 
 
 </head>
-<body style="background-color:white;">
+<body  class="sb-nav-fixed" style="background-color: white ;width:100% ">
   
     
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" >
      
   <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanel4">
 <ProgressTemplate>
@@ -103,6 +79,9 @@
 </asp:UpdateProgress>
 
     <asp:ScriptManager runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
+
+        <div class="container">
+        
 <%-------------------------------mensajes-------%>  
   
          <%-- olvide contraseña --%>
@@ -808,16 +787,16 @@
     <div class="card card0 border-0">
         <div class="row d-flex">
             <div class="col-lg-6">
-                <div class="card1 pb-5">
+                <div class="card1 pb-3">
                     <div class="row"> <img src="Imagen/Sat.png" class="logo" /> </div>
-                    <div class="row px-1 justify-content-center mt-2 mb-1 border-line"> 
+                    <div class="row px-1 justify-content-center mt-0 mb-0 border-line"> 
                         <img src="Imagen/ntlink.png" class="image" /> </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="card2 card border-0 px-4 py-5">
-                    <div class="row px-3 mb-4">
-                        <div class="line"></div> <small class="or text-center">Login</small>
+                <div class="card2 card border-0 px-4 py-3">
+                    <div class="row px-0 mb-4">
+                        <div class="line"></div> <small class=" text-center">Login</small>
                         <div class="line"></div>
                     </div>
                     <div class="row px-3 mb-4"> <label class="mb-1">
@@ -878,7 +857,9 @@
                  </ContentTemplate>
            </asp:UpdatePanel>
          
-
+                        </div>
+                
      </form>
 </body>
 </html>
+

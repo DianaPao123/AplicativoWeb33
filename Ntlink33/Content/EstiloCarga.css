@@ -1,0 +1,53 @@
+﻿.Carga {
+    position: fixed;
+    z-index: 999;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    /*filter: alpha(opacity=60);
+    opacity: 0.7;*/
+    -moz-opacity: 0.8;
+}
+
+.centrar {
+    z-index: 1000;
+    margin: 300px auto;
+    padding: 10px;
+    width: 130px;
+    /*background-color: White;*/
+    border-radius: 10px;
+    filter: alpha(opacity=100);
+    opacity: 1;
+    -moz-opacity: 1;
+}
+
+.overlay {
+    position: fixed;
+    z-index: 98;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    /*background-color: #353535;
+    filter: alpha(opacity=80);
+    opacity: 0.8;*/
+}
+
+.overlayContent {
+    z-index: 99;
+    margin: 250px auto;
+    width: 80px;
+    height: 80px;
+}
+
+    .overlayContent h2 {
+        font-size: 18px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .overlayContent img {
+        width: 80px;
+        height: 80px;
+        opacity:1;
+    }
