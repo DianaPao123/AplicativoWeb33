@@ -18,8 +18,6 @@
         }
     </style>
 
-       <asp:UpdatePanel ID="up1" runat="server"  UpdateMode="Conditional"  >
-    <ContentTemplate>
               
  
               
@@ -28,6 +26,8 @@
                <h3>Consultas CFDI</h3>
             </div>
             <div class ="card-body" >
+               <asp:UpdatePanel ID="UpdatePanel2" runat="server"  UpdateMode="Conditional"  >
+    <ContentTemplate>
        
   <div class = "row">
    <div class = "col-lg-12">
@@ -53,7 +53,7 @@
    <div class = "form-group col-lg-4">
     <asp:Label ID="Label2" runat="server" class="control-label" Text="Clientes"></asp:Label>
       <asp:DropDownList runat="server" ID="ddlClientes" AppendDataBoundItems="True" DataTextField="RazonSocial"
-			 DataValueField="idCliente" CssClass="form-control" Width= "480px" />
+			 DataValueField="idCliente"  CssClass ="btn btn-default dropdown-toggle optionAlinear" BackColor="White" Width="100%" />
         </div>
 
           </div>
@@ -120,7 +120,16 @@
                           </div>
 
 </div>
-	
+	</ContentTemplate>
+                <Triggers>
+                         <asp:AsyncPostBackTrigger  ControlID="btnExportar" EventName="Click" />
+                 </Triggers>
+                   </asp:UpdatePanel>
+
+
+                 <asp:UpdatePanel ID="up1" runat="server"  UpdateMode="Conditional"  >
+    <ContentTemplate>
+      
                    <asp:HiddenField runat="server" ID="hidSel"  Value="t" EnableViewState="true" />
 
                      <div  class="row mt-4">
@@ -154,9 +163,7 @@
  <%--           <asp:BoundField HeaderText="Usuario" DataField="Usuario"/>--%>
 			<asp:BoundField HeaderText="Status CFDI" DataField="StatusFactura"/>
             <asp:BoundField HeaderText="Fecha Cancelación" DataField="FechaCancelacion" />
-		<%--	<asp:ButtonField ButtonType="Link" Text="Pagar" CommandName="Pagar" />
-			<asp:ButtonField ButtonType="Link" Text="XML" CommandName="DescargarXml" />
-			<asp:ButtonField ButtonType="Link" Text="PDF" CommandName="DescargarPdf" />
+		<%--<asp:ButtonField ButtonType="Link" Text="PDF" CommandName="DescargarPdf" />
 			<asp:ButtonField ButtonType="Link" Text="EnviarEmail" CommandName="EnviarEmail" />--%>
                <asp:TemplateField HeaderStyle-CssClass="sorting_disabled"  HeaderText= "Opciones"     
                    ItemStyle-HorizontalAlign="Center">
@@ -193,18 +200,21 @@
                  </ItemTemplate>
             </asp:TemplateField>
 
-            <asp:TemplateField  HeaderText="Cancelar">
+            <asp:TemplateField  HeaderText="Cancelar" ItemStyle-HorizontalAlign="Center">
                 <ItemTemplate>
-                    <asp:Button class="btn btn-light"  runat="server" 
+                 <%--   <asp:Button class="btn btn-light"  runat="server" 
                         Text='<%# (short)Eval("Cancelado") == 1 ? "Acuse Cancelacion" : "Cancelar"  %>'
                         CommandName='<%# (short)Eval("Cancelado") == 1 ? "Acuse" : "Cancelar"  %>'
-                        ID="btnCancelarf" CommandArgument='<%#Eval("idventa") %>'  />
+                        ID="btnCancelarf" CommandArgument='<%#Eval("idventa") %>'  />--%>
                     
-<%--                       <asp:LinkButton ID="BtnVistaPreviaP" CssClass="btn btn-default"   
-                           CommandName='<%# (short)Eval("Cancelado") == 1 ? "Acuse" : "Cancelar"  %>'
-                                 Text='<%# (short)Eval("Cancelado") == 1 ? "Acuse Cancelacion" : "Cancelar"  %>'  runat="server" >
-                                <span class="glyphicon glyphicon-envelope"></span> 
-                                  </asp:LinkButton>--%>
+                            <asp:LinkButton  CommandName='<%# (short)Eval("Cancelado") == 1 ? "Acuse" : "Cancelar"  %>'
+                                 ID="btnCancelarf" CommandArgument='<%#Eval("idventa") %>' 
+                                CssClass="btn btn-light" runat="server" style="padding:0px 2px; " >   
+                                <i class= '<%# (short)Eval("Cancelado") == 1 ? "glyphicon glyphicon-download' title='Acuse' style='color:red"  :
+                                         "glyphicon glyphicon-remove-circle' title='Cancelar"  %>' ></i>  
+                                                                             </asp:LinkButton>
+                                         
+
 
                 </ItemTemplate>
             </asp:TemplateField>
@@ -226,18 +236,13 @@
             <asp:BoundField HeaderText="Folio" DataField="folio" />
 			<asp:BoundField HeaderText="Folio Fiscal" DataField="Guid" />
 			<asp:BoundField HeaderText="Fecha" DataField="fecha" DataFormatString="{0:d}" />
-			<asp:BoundField HeaderText="Cliente" DataField="Cliente" />
+		<%--	<asp:BoundField HeaderText="Cliente" DataField="Cliente" />--%>
             <asp:BoundField HeaderText="RFC" DataField="Rfc" />
 			<asp:BoundField HeaderText="% I.V.A." DataField="PorcentajeIva" DataFormatString="{0:F2}" ItemStyle-HorizontalAlign="Right" />
 			<asp:BoundField HeaderText="SubTotal" DataField="Subtotal" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
-			<%--<asp:BoundField HeaderText="I.V.A." DataField="IVA" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
-            <asp:BoundField HeaderText="Retención I.V.A." DataField="RetIva" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
-            <asp:BoundField HeaderText="Retención I.S.R." DataField="RetIsr" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
-            <asp:BoundField HeaderText="I.E.P.S." DataField="Ieps" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />--%>
-
 			<asp:BoundField HeaderText="Total" DataField="Total" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
-            <asp:BoundField HeaderText="Usuario" DataField="Usuario"/>
-			<asp:BoundField HeaderText="Status" DataField="StatusFactura"/>
+<%--            <asp:BoundField HeaderText="Usuario" DataField="Usuario"/>
+			--%><asp:BoundField HeaderText="Status" DataField="StatusFactura"/>
         </Columns>
     </asp:GridView>
 
@@ -245,91 +250,119 @@
                          </div>
    
 
-
-</div>
-         </div>
-
 </ContentTemplate>
            <Triggers>
-                     
+                               <asp:AsyncPostBackTrigger  ControlID="btnBuscar" EventName="Click" />
+                <asp:AsyncPostBackTrigger  ControlID="btnPagar" EventName="Click" />
+              <%--  <asp:AsyncPostBackTrigger  ControlID="btnExportar" EventName="Click" />--%>
+                       <asp:AsyncPostBackTrigger  ControlID="lnkDelete" EventName="Click" />
+        
+                      
+                
            </Triggers>
            
            </asp:UpdatePanel>
-                
+        
 
+</div>
+         </div>
+        
 
-           <asp:Button ID="btnShow3" runat="server" Style="display:none"  Text="Show Modal Popup" />
-     <asp:Button ID="Button1" runat="server" Style="display:none"  Text="Show Modal Popup" />
-     <asp:ModalPopupExtender ID="mpMensajeError" runat="server" PopupControlID="PanelError"
-         TargetControlID="btnShow3" OkControlID="btnYes3" BackgroundCssClass="modalBackground">
-    </asp:ModalPopupExtender>
-    <asp:Panel ID="PanelError" runat="server" CssClass="modalPopup" Style="display: none">
-        <div class="header"  style="background-color:red">
-            Error
-        </div>
-        <div class="body">
-            <br />
-          &nbsp;&nbsp;  <asp:Label ID="lblError" runat="server" ForeColor="Red" />
-        </div>
-        <div class="footer" >
-         <asp:HiddenField ID="HiddenField4" runat="server" />
-                                    
-            <asp:Button ID="btnYes3" runat="server" Text="Aceptar"  CssClass="btn btn-outline-success" />
                          
-        </div>
-    </asp:Panel>
-
-   
-   <asp:HiddenField ID="hf_DeleteID" runat="server" />
-         
-    <asp:Button ID="btnShow" runat="server" Style="display:none"  Text="Show Modal Popup" />
-     <asp:ModalPopupExtender ID="mpex" runat="server" PopupControlID="pnlPopup" TargetControlID="btnShow"
-        OkControlID="btnYes" CancelControlID="btnNo" BackgroundCssClass="modalBackground">
-    </asp:ModalPopupExtender>
-    <asp:Panel ID="pnlPopup" runat="server" CssClass="modalPopup" Style="display: none">
-        <div class="header" >
-            Cancelar
-        </div>
-        <div class="body">
-            <br />
-          &nbsp;&nbsp;  ¿Cancelar Documento?
-        </div>
-        <div class="footer" >
-                                    
-            <asp:Button ID="btnYes" runat="server" Text="Yes" Style="display:none" CssClass="yes" />
-                   <asp:LinkButton ID="lnkDelete" CssClass="btn btn-outline-success" OnClick="lnkDelete_Click"  runat="server" >
-                            Cancelar <i class="fa fa-trash" title="delete"></i> 
-                                </asp:LinkButton>
-                        
-            <asp:Button ID="btnNo" runat="server" Text="Cancelar"  CssClass="btn btn-outline-success"  />
-        </div>
-    </asp:Panel>
-
-
-      <asp:UpdatePanel ID="UpdatePanel1" runat="server"  UpdateMode="Conditional"  >
+    <asp:UpdatePanel ID="UpdatePanelR100" runat="server"  UpdateMode="Conditional"  >
     <ContentTemplate>
+ 
+    <iframe id="MyIframe" runat="server" style="display:none;" ></iframe>
+          
 
-         <asp:ModalPopupExtender runat="server" ID="mpePagar" TargetControlID="btnpagarDummy"
-        BackgroundCssClass="modalBackground" CancelControlID="btnCerrarPagar" PopupControlID="pnlPagar" />
-    <asp:Panel runat="server" ID="pnlPagar" CssClass="modalPopup" Style="display: none">
-         <div class="header" >
-            Pagar Factura
-        </div>
-    <div class="body">
-        <div class="card-body">
-                <div class = "row"> 
+        </ContentTemplate>
+        <Triggers>
+                           <asp:AsyncPostBackTrigger ControlID="gvFacturas" EventName="RowCommand"/> 
+              <asp:AsyncPostBackTrigger  ControlID="btnExportar" EventName="Click" />
+            <asp:AsyncPostBackTrigger  ControlID="btnDescargarTodo" EventName="Click" />
+                      
+              
+        </Triggers>
+        </asp:UpdatePanel>
+
+    <%-- mensajes --%>
+      <div id="ModalError" class="modal fade" data-backdrop="static" role="dialog"
+        runat="server" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header d-block " style="padding:10px 10px 0 10px; background-color:#eb8181 ">
+        <h4 class="d-inline-block ml-3" style="color:white" >Error </h4>
+               <button type="button" class="close  bottom-ri    ght mr-3 btn-lg" aria-label="Close" data-dismiss="modal" style="font-size: 40px;">
+                 <span aria-hidden="true">&times;</span></button>
+                       </div>
+                        
+      <div class="modal-body">
+           <div class = "row">
+                    
+                    <div class = "col-12">
+                   <asp:UpdatePanel ID="UpdatePanel4" runat="server"  UpdateMode="Conditional"   >
+                    <ContentTemplate>
+                    <asp:Label runat="server" ID="lblError" CssClass="form-label" ForeColor="Red" />
+    
+                   </ContentTemplate>
+                       <Triggers>
+                             <asp:AsyncPostBackTrigger  ControlID="btnBuscar" EventName="Click" />
+                              <asp:AsyncPostBackTrigger ControlID="gvFacturas" EventName="RowCommand"/> 
+                                 <asp:AsyncPostBackTrigger  ControlID="btnEnviarEmail" EventName="Click" />
+                              <asp:AsyncPostBackTrigger  ControlID="lnkDelete" EventName="Click" />
+                       
+                       
+                       </Triggers>
+                    </asp:UpdatePanel>
+                        
+                    </div>
+                    </div>
+                     
+        
+     </div>
+    
+      <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+               <span class="glyphicon glyphicon-remove-sign p-1" title="cerrar"></span>Cerrar</button>
+
+      </div>
+
+    </div>
+
+  </div>
+    </div>
+   
+
+    <%--  --%>
+      <div id="ModalPagar" class="modal fade" data-backdrop="static" role="dialog"
+        runat="server" data-keyboard="false">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header d-block bg-light"  style="padding:10px 10px 0 10px; ">
+        <h4 class="d-inline-block ml-3"  >
+                              Pagar Factura</h4>
+                               <button type="button" class="close  bottom-ri    ght mr-3 btn-lg" aria-label="Close" data-dismiss="modal" style="font-size: 40px;">
+                            <span aria-hidden="true">&times;</span></button>
+         </div>
+
+         <asp:UpdatePanel ID="UpdatePanel7" runat="server"  UpdateMode="Conditional"   >
+       <ContentTemplate>
+           
+      <div class="modal-body">
+        <div class = "row"> 
                     <div class="col-lg-11" >       
-                   <asp:Label runat="server" ID="lblIdventa" Visible="False" />
+                   <asp:Label runat="server" ID="lblIdventa" Visible="False" Font-Bold="true" />
                         </div>
                     </div>
             <div class = "row"> 
                     <div class="col-lg-11" >       
-                     <asp:Label runat="server" ID="lblErrorPago" ForeColor="Red" />
+                     <asp:Label runat="server" ID="lblErrorPago" ForeColor="Red" class="control-label" />
                         </div>
                 </div>
             <div class = "row"> 
                     <div class="col-lg-11" >       
-             <asp:Label runat="server" ID="Label9"  class="control-label" Text="No. de Folio "/>
+             <asp:Label runat="server" ID="Label9"  class="control-label" Font-Bold="true" Text="No. de Folio "/>
 	    <asp:Label runat="server" ID="lblFolioPago" />
                         </div>
                 </div>
@@ -352,38 +385,57 @@
 			 ControlToValidate="txtReferenciaPago" ValidationGroup="Pago" Display="Dynamic"/>
 		</div>
             </div>
-            <br />
-		<div class = "row"> 
+            
+        
+     </div>
+    
+      <div class="modal-footer">
+ 
+                           <asp:LinkButton ID="btnPagar" CssClass="btn btn-default" 
+                                          ValidationGroup="Pago"     Text="Concepto"
+                               runat="server"   OnClick="btnPagar_Click" >
+                           <span class="glyphicon glyphicon-usd"></span> Pago 
+                         </asp:LinkButton>
+           <button type="button" class="btn btn-default" data-dismiss="modal">
+               <span class="glyphicon glyphicon-remove-sign p-1" title="enviar"></span>Cerrar</button>
+      </div>
+        </ContentTemplate>
+             <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="gvFacturas" EventName="RowCommand"/> 
+         
+             </Triggers>
+                       </asp:UpdatePanel>
+
+    </div>
+
+  </div>
+    </div>  
+   
+
+       <div id="ModalCorreo" class="modal fade" data-backdrop="static" role="dialog"
+        runat="server" data-keyboard="false">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header d-block bg-light"  style="padding:10px 10px 0 10px; ">
+        <h4 class="d-inline-block ml-3"  >
+                              Enviar correo</h4>
+                               <button type="button" class="close  bottom-ri    ght mr-3 btn-lg" aria-label="Close" data-dismiss="modal" style="font-size: 40px;">
+                            <span aria-hidden="true">&times;</span></button>
+         </div>
+
+         <asp:UpdatePanel ID="UpdatePanel1" runat="server"  UpdateMode="Conditional"   >
+       <ContentTemplate>
+           
+      <div class="modal-body">
+                      <div class = "row"> 
                     <div class="col-lg-11" >       
-		<asp:Button runat="server" ID="btnPagar" Text="Pagar" onclick="btnPagar_Click" 
-            ValidationGroup="Pago" CssClass="btn btn-outline-success"/>&nbsp;&nbsp;
-		<asp:Button runat="server" ID="btnCerrarPagar" Text="Cancelar" CssClass="btn btn-outline-success"
-            onclick="btnCerrarPagar_Click" />
-		</div>
-            </div>
-</div>
-        </div>
-        </asp:Panel>
-
-
-
-                
-   <asp:ModalPopupExtender runat="server" ID="mpeEmail" TargetControlID="btnEmailDummy"
-        BackgroundCssClass="modalBackground" CancelControlID="btnCerrarEmail" PopupControlID="pnlEmail" />
-    <asp:Panel runat="server" ID="pnlEmail" CssClass="modalPopup" Style="display: none">
-         <div class="header" >
-            Editar Concepto
-        </div>
-    <div class="body">
-        <div class="card-body">
-                <div class = "row"> 
-                    <div class="col-lg-11" >       
-        <asp:Label runat="server" ID="lblGuid" Visible="False" />
+        <asp:Label runat="server" ID="lblGuid" Visible="False"  class="control-label" />
                         </div>
                     </div>
                          <div class = "row">
        <div class = "form-group col-lg-11">
-             <asp:Label  class="control-label" ID="Label6" runat="server" Text="Se enviara a"></asp:Label>
+             <asp:Label  class="control-label" ID="Label6" runat="server" Font-Bold="true" Text="Se enviara a"></asp:Label>
            
 			 <asp:Label runat="server" ID="lblEmailCliente"  class="control-label"/>
 		</div>
@@ -391,34 +443,84 @@
         <div class = "row">
        <div class = "form-group col-lg-11">
            <asp:Label  class="control-label" ID="Label7" runat="server" Text="Correos adicionales"></asp:Label>
-   			<asp:TextBox runat="server" ID="txtEmails" CssClass="form-control" 
-                />
+   			<asp:TextBox runat="server" ID="txtEmails" CssClass="form-control" />
             <asp:Label  ID="Label8" runat="server" Font-Bold="false" Text="Separados por comas"></asp:Label>
    			</div>
             </div>
-		<div class = "row">
-       <div class = "form-group col-lg-11">
         
-		<asp:Button runat="server" ID="btnEnviarEmail" Text="Enviar" onclick="btnEnviarMail_Click" CssClass="btn btn-outline-success"/>&nbsp;&nbsp;
-		<asp:Button runat="server" ID="btnCerrarEmail" Text="Cancelar" CssClass="btn btn-outline-success"/>
-           </div>
-            </div>
-                    </div>
-        </div>
-	</asp:Panel>
-
-
-    <asp:Button runat="server" ID="btnEmailDummy" style="display: none;" class="btn btn-primary"/>
-	<asp:Button runat="server" ID="btnPagarDummy" style="display: none;" class="btn btn-primary"/>
+     </div>
     
-     
-
-
-
-
-
-
-
+      <div class="modal-footer">
+ 	
+                           <asp:LinkButton ID="btnEnviarEmail" CssClass="btn btn-default" 
+                                           Text="Concepto"
+                               runat="server"   OnClick="btnEnviarMail_Click" >
+                           <span class="glyphicon glyphicon-envelope"></span> Enviar 
+                         </asp:LinkButton>
+           <button type="button" class="btn btn-default" data-dismiss="modal">
+               <span class="glyphicon glyphicon-remove-sign p-1" title="enviar"></span>Cerrar</button>
+      </div>
         </ContentTemplate>
-           </asp:UpdatePanel>
+             <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="gvFacturas" EventName="RowCommand"/> 
+         
+             </Triggers>
+                       </asp:UpdatePanel>
+
+    </div>
+
+  </div>
+    </div>  
+        
+       <div id="ModalCancelar" class="modal fade" data-backdrop="static" role="dialog"
+        runat="server" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header d-block bg-light"  style="padding:10px 10px 0 10px; ">
+        <h4 class="d-inline-block ml-3"  >
+                           Cancelar</h4>
+                               <button type="button" class="close  bottom-ri    ght mr-3 btn-lg" aria-label="Close" data-dismiss="modal" style="font-size: 40px;">
+                            <span aria-hidden="true">&times;</span></button>  </div>
+               
+      <div class="modal-body">
+           <div class = "row">
+           <div class = "col-12">
+             <span> ¿Desea Cancelar Documento?</span>
+             </div>
+                    </div>
+                           
+     </div>
+      <div class="modal-footer">
+    <asp:UpdatePanel ID="UpdatePanel3" runat="server"  UpdateMode="Conditional"   >
+    <ContentTemplate>
+
+   <asp:HiddenField ID="hf_DeleteID" runat="server" />
+
+        
+          <asp:LinkButton ID="lnkDelete" CssClass="btn btn-default" OnClick="lnkDelete_Click"  runat="server" >
+                           <i class="fa fa-trash" title="delete"></i>  Cancelar 
+                                </asp:LinkButton>
+                        
+             <button type="button" class="btn btn-default" data-dismiss="modal">
+               <span class="glyphicon glyphicon-remove-sign p-1" title="cerrar"></span>Cerrar</button>
+      </ContentTemplate>
+                </asp:UpdatePanel>
+      </div>
+
+    </div>
+
+  </div>
+    </div>
+
+
+
+
+
+             
+
+ 
+
+
+
+
 </asp:Content>

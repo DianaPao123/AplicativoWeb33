@@ -170,6 +170,7 @@ namespace ServicioLocalWeb
             {
                 var cliente = new ClienteNtLink.ClienteTimbradoNtlink();
                 string respuesta = cliente.CancelaCfdi(folioFiscal, rfcEmisor, expresion, rfcReceptor);
+            
                 if (respuesta.StartsWith("<?xml version=\"1.0\"?>"))
                 {
                     NtLinkFactura fact = new NtLinkFactura(0);

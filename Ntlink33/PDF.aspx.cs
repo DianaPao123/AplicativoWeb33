@@ -18,16 +18,29 @@ namespace Ntlink33
                     this.Response.Redirect("wfrLogin.aspx");
                 }
                 //var bytes = context.Cache.Get(Request.QueryString.Get("cacheKey")) as byte[];
-                if (Session["cacheKey"] != null)
+                if (Session["cacheKey"] != null && Session["cacheName"] != null && Session["cacheTipo"]!=null)
                 {
                     var pdf = Session["cacheKey"];
+                    var  name= Session["cacheName"];
+                    var tipo = Session["cacheTipo"];
 
                     Session["cacheKey"] = null;
+                    Session["cacheName"] = null;
+                    Session["cacheTipo"] = null;
+
                     Response.Clear();
-                    Response.ContentType = "application/pdf";
-                    Response.AddHeader("Content-Disposition", "attachment; filename=preview.pdf");
-                    Response.BinaryWrite(pdf as byte[]);
-                   // Response.Write("RGV");
+                    if (tipo.ToString() == "pdf")
+                    {
+                        Response.ContentType = "application/pdf";
+                        Response.BinaryWrite(pdf as byte[]);
+                    }
+                    else
+                    {
+                        Response.ContentType = "text/xml";
+                        Response.Write(pdf);
+                    }
+                    Response.AddHeader("Content-Disposition", "attachment; filename="+name.ToString()+"."+tipo);
+                   // 
                     Response.Flush();
                     Response.End();
                 }

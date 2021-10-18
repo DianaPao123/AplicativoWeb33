@@ -157,7 +157,7 @@
                         <li><a class="dropdown-item" href="#!"><asp:Label runat="server" ID="lblUsuario" class="control-label" ></asp:Label></a></li>
                         <%--<li><a class="dropdown-item" href="#!">Activity Log</a></li>--%>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Salir</a></li>
+                        <li><a class="dropdown-item" href="<%: ResolveUrl("~/LogOut.aspx")%>">Salir</a></li>
                     </ul>
                </li>
             </ul>
@@ -216,7 +216,7 @@
 					
 				</ul>
                 </li>    
-			<li><a href="login.html"><em class="glyphicon glyphicon-off">&nbsp;</em> Salir</a></li>
+			<li><a href="<%: ResolveUrl("~/LogOut.aspx")%>"><em class="glyphicon glyphicon-off">&nbsp;</em> Salir</a></li>
 		</ul>
 
                    </div>

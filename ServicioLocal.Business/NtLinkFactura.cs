@@ -99,16 +99,16 @@ namespace ServicioLocal.Business
                         return null;
                     }
                     string ruta = Path.Combine(ConfigurationManager.AppSettings["Salida"], empresa.RFC);
-                    //if (File.Exists(Path.Combine(ruta, uuid + ".xml")))
-                    //{
-                    //    var bytes = File.ReadAllBytes(Path.Combine(ruta, uuid + "." + tipo));
-                    //    return bytes;
-                    //}
                     if (File.Exists(Path.Combine(ruta, uuid + ".xml")))
                     {
-                        var bytes = File.ReadAllBytes(Path.Combine(ruta, "pruebasss" + "." + tipo));
+                        var bytes = File.ReadAllBytes(Path.Combine(ruta, uuid + "." + tipo));
                         return bytes;
                     }
+                    //if (File.Exists(Path.Combine(ruta, uuid + ".xml")))
+                    //{
+                    //    var bytes = File.ReadAllBytes(Path.Combine(ruta, "pruebasss" + "." + tipo));
+                    //    return bytes;
+                    //}
                     else
                     {
                         Logger.Error("No se encontró la factura: " + uuid);
@@ -1572,6 +1572,8 @@ namespace ServicioLocal.Business
                         fact.SelloCancelacion = ac.SelloSat;
                         db.facturas.ApplyCurrentValues(fact);
                         db.SaveChanges();
+
+
                     }
                 }
             }

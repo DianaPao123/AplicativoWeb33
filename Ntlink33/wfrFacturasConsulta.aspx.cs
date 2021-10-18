@@ -61,20 +61,46 @@ namespace Ntlink33
 
             if (e.CommandName.Equals("DescargarXml"))
             {
-                string uuid = this.gvFacturas.Rows[Convert.ToInt32(e.CommandArgument)].Cells[1].Text;
-                var cliente = NtLinkClientFactory.Cliente();
-                using (cliente as IDisposable)
+                try
                 {
-                    var id = (int)this.gvFacturas.DataKeys[Convert.ToInt32(e.CommandArgument)].Values["idventa"];
-                    var cfd = cliente.GetFactura(id);
-                    string xml = Encoding.UTF8.GetString(cliente.FacturaXml(uuid));
-                    //Response.AddHeader("Content-Disposition", "attachment; filename=" + uuid + ".xml");
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + cfd.RFC + "_" + cfd.Folio + "_" + cfd.Fecha.ToString("yyyyMMdd") + "_" + uuid + ".xml");
-                    this.Response.ContentType = "text/xml";
-                    this.Response.Charset = "UTF-8";
-                    this.Response.Write(xml);
-                    this.Response.End();
+                    string uuid = this.gvFacturas.Rows[Convert.ToInt32(e.CommandArgument)].Cells[1].Text;
+                    var cliente = NtLinkClientFactory.Cliente();
+                    using (cliente as IDisposable)
+                    {
+                        var id = (int)this.gvFacturas.DataKeys[Convert.ToInt32(e.CommandArgument)].Values["idventa"];
+                        var cfd = cliente.GetFactura(id);
+                        string name = cfd.RFC + "_" + cfd.Folio + "_" + cfd.Fecha.ToString("yyyyMMdd") + "_" + uuid;
+
+                        string xml = Encoding.UTF8.GetString(cliente.FacturaXml(uuid));
+                        if (xml == null)
+                        {
+                            this.lblError.Text = "Archivo no encontrado";
+                            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                          "$('#MainContent_ModalError').modal('show') ", true);
+                            return;
+                        }
+                        //Response.AddHeader("Content-Disposition", "attachment; filename=" + uuid + ".xml");
+                        //Response.AddHeader("Content-Disposition", "attachment; filename=" + cfd.RFC + "_" + cfd.Folio + "_" + cfd.Fecha.ToString("yyyyMMdd") + "_" + uuid + ".xml");
+                        //this.Response.ContentType = "text/xml";
+                        //this.Response.Charset = "UTF-8";
+                        //this.Response.Write(xml);
+                        //this.Response.End();
+                        Session["cacheTipo"] = "xml";
+                        Session["cacheName"] = name;
+                        Session["cacheKey"] = xml;
+                        MyIframe.Attributes["src"] = "PDF.aspx";
+
+                    }
                 }
+                catch (Exception)
+                {
+                    this.lblError.Text = "Archivo no encontrado";
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                  "$('#MainContent_ModalError').modal('show') ", true);
+                    return;
+
+                }
+                  
             }
             else if (e.CommandName.Equals("DescargarPdf"))
             {
@@ -84,19 +110,24 @@ namespace Ntlink33
                 {
                     var id = (int)this.gvFacturas.DataKeys[Convert.ToInt32(e.CommandArgument)].Values["idventa"];
                     var cfd = cliente.GetFactura(id);
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + cfd.RFC + "_" + cfd.Folio + "_" + cfd.Fecha.ToString("yyyyMMdd") + "_" + uuid + ".pdf");
-                    //Response.AddHeader("Content-Disposition", "attachment; filename=" +  uuid + ".pdf");
-                    this.Response.ContentType = "application/pdf";
+                    string name = cfd.RFC + "_" + cfd.Folio + "_" + cfd.Fecha.ToString("yyyyMMdd") + "_" + uuid;
+                   // Response.AddHeader("Content-Disposition", "attachment; filename=" + cfd.RFC + "_" + cfd.Folio + "_" + cfd.Fecha.ToString("yyyyMMdd") + "_" + uuid + ".pdf");
+                   //  this.Response.ContentType = "application/pdf";
                     var pdf = cliente.FacturaPdf(uuid);
                     if (pdf == null)
                     {
                         this.lblError.Text = "Archivo no encontrado";
-                        mpMensajeError.Show();
-
+                        // mpMensajeError.Show();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                       "$('#MainContent_ModalError').modal('show') ", true);
                         return;
                     }
-                    this.Response.BinaryWrite(pdf);
-                    this.Response.End();
+                    // this.Response.BinaryWrite(pdf);
+                    // this.Response.End();
+                    Session["cacheTipo"] = "pdf";
+                  Session["cacheName"] = name;
+                    Session["cacheKey"] = pdf;
+                    MyIframe.Attributes["src"] = "PDF.aspx";
                 }
             }
             else if (e.CommandName.Equals("EnviarEmail"))
@@ -110,12 +141,19 @@ namespace Ntlink33
                     this.lblEmailCliente.Text = c.Email;
                 }
                 this.lblGuid.Text = this.gvFacturas.Rows[Convert.ToInt32(e.CommandArgument)].Cells[1].Text;
-                FillView();
-                this.mpeEmail.Show();
-                
+                // FillView();
+                //this.mpeEmail.Show();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+             "$('#MainContent_ModalCorreo').modal('show') ", true);
+
             }
             else if (e.CommandName.Equals("Pagar"))
             {
+
+                this.txtFechaPago.Text = "";
+                this.lblFolioPago.Text = "";
+                this.txtReferenciaPago.Text = "";
+
                 var id = (int)this.gvFacturas.DataKeys[Convert.ToInt32(e.CommandArgument)].Values["idventa"];
                 var cliente = NtLinkClientFactory.Cliente();
                 using (cliente as IDisposable)
@@ -126,9 +164,12 @@ namespace Ntlink33
                     this.txtReferenciaPago.Text = venta.ReferenciaPago;
                 }
                 this.lblIdventa.Text = id.ToString();
-                FillView();
+                // FillView();
 
-                this.mpePagar.Show();
+                //this.mpePagar.Show();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                  "$('#MainContent_ModalPagar').modal('show') ", true);
+
             }
             else if (e.CommandName.Equals("Cancelar"))
             {
@@ -138,8 +179,12 @@ namespace Ntlink33
                 index = Convert.ToInt32(e.CommandArgument);
                 ViewState["IDCli"] = index;
                 hf_DeleteID.Value = ID.ToString();
-                mpex.Show();
-                FillView();
+
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+               "$('#MainContent_ModalCancelar').modal('show') ", true);
+
+                // mpex.Show();
+                // FillView();
                 /*
                 try
                 {
@@ -188,7 +233,9 @@ namespace Ntlink33
                         if (factu == null)
                         {
                             this.lblError.Text = "SelloCFDI no encontrado";
-                            mpMensajeError.Show();
+                            // mpMensajeError.Show();
+                            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                          "$('#MainContent_ModalError').modal('show') ", true);
 
                             return;
                         }
@@ -199,6 +246,14 @@ namespace Ntlink33
 
                         string cadena = URL + "?&id=" + (fact.Guid).ToString().ToUpper() + "&re=" + fact.RfcEmisor + "&rr=" + fact.RFC + "&tt=" + fact.Total + "&fe=" + Var_Sub;
                         string sal = cliente.GetConsultaEstatusCFDI(cadena);
+                        if (sal == "Error en la consulta al sat")
+                        {
+                            this.lblError.Text = sal;
+
+                            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                      "$('#MainContent_ModalError').modal('show') ", true);
+
+                        }
 
                         string[] status = sal.Split('|');
 
@@ -206,7 +261,9 @@ namespace Ntlink33
                         if (pdf == null || pdf.Length == 0)
                         {
                             this.lblError.Text = "Archivo no encontrado";
-                            mpMensajeError.Show();
+                            // mpMensajeError.Show();
+                            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                           "$('#MainContent_ModalError').modal('show') ", true);
 
                             return;
                         }
@@ -225,23 +282,13 @@ namespace Ntlink33
 
                         uuid = cfd.Guid;
                         bytes = cliente2.GetFacturaAcuse(uuid, cfd.RfcEmisor, cfd.FechaCancelacion);
-                        if (bytes != null)
-                        {
-                            /*       string xml = Encoding.UTF8.GetString(bytes);
-                                   Response.AddHeader("Content-Disposition", "attachment; filename=" + cfd.RFC + "_" + cfd.Folio + "_" + cfd.Fecha.ToString("yyyyMMdd") + "_" + uuid + ".xml");
-                                   this.Response.ContentType = "text/xml";
-                                   this.Response.Charset = "UTF-8";
-                                   this.Response.Write(xml);
-                                  // this.Response.End();
-                             */
-                        }
+                      
                     }
                     // this.Response.End();
 
                     ///---------------------------correo---------
                     try
                     {
-
                         //        Logger.Debug("Enviar Correo");
                         //byte[] xmlBytes = Encoding.UTF8.GetBytes(comprobante.XmlString);
                       
@@ -289,17 +336,20 @@ namespace Ntlink33
                     catch (Exception ee)
                     {
                         lblError.Text = ee.Message;
-                        mpMensajeError.Show();
+                        //   mpMensajeError.Show();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                       "$('#MainContent_ModalError').modal('show') ", true);
 
                     }
                     ///-----------------------------correo
 
-                    Response.Clear();
-                    Response.BufferOutput = false;
-                    string archiveName = "Acuse.zip";
-                    Response.ContentType = "application/zip";
-                    Response.AddHeader("content-disposition", "inline; filename=\"" + archiveName + "\"");
+                    //Response.Clear();
+                    //Response.BufferOutput = false;
+                    //string archiveName = "Acuse.zip";
+                    //Response.ContentType = "application/zip";
+                    //Response.AddHeader("content-disposition", "inline; filename=\"" + archiveName + "\"");
 
+                    System.IO.MemoryStream stream2 = new System.IO.MemoryStream();
                     using (ZipFile zip = new ZipFile())
                     {
                         if (pdf != null)
@@ -308,17 +358,25 @@ namespace Ntlink33
                             zip.AddEntry("Acuse_" + uuid + ".xml", bytes);
 
                         //   zip.Save("Acuse.zip");
-                        zip.Save(Response.OutputStream);
+                        //zip.Save(Response.OutputStream);
+                        zip.Save(stream2);
+                        byte[] Datos = stream2.ToArray();
 
+                        //Response.End();
+
+                        var DatosZip = Convert.ToBase64String(Datos);
+                        Session["cacheName"] = "Acuse";
+                        Session["cacheKey"] = DatosZip;
+
+                        MyIframe.Attributes["src"] = "ZIP.aspx";
                     }
-                    Response.End();
-                    
-
                 }
                 catch (FaultException fe)
                 {
                     lblError.Text = fe.Message;
-                    mpMensajeError.Show();
+                    //  mpMensajeError.Show();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                   "$('#MainContent_ModalError').modal('show') ", true);
 
                 }
                 catch (Exception fe)
@@ -334,8 +392,6 @@ namespace Ntlink33
 
                 if (ViewState["seleccionar"].ToString() != "true")
                 {
-
-
                     sel = true;
                     SelText = "Ninguno";
                     // SelText = "Seleccionar Ninguno";
@@ -346,11 +402,7 @@ namespace Ntlink33
 
                 else
                 {
-
-
-
-
-
+                                                                          
                     //SelText = "Seleccionar Todos";
                     SelText = "Todos";
                     sel = false;
@@ -382,11 +434,27 @@ namespace Ntlink33
        
         protected void btnExportar_Click(object sender, EventArgs e)
         {
-            var ex = new Export();
-            this.Response.AddHeader("Content-Disposition", "attachment; filename=Reporte.xlsx");
-            this.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            this.Response.BinaryWrite(ex.GridToExcel(this.gvFacturaCustumer, "Facturas"));
-            this.Response.End();
+            try
+            {
+                var ex = new Export();
+                var excel = ex.GridToExcel(this.gvFacturaCustumer, "Facturas");
+                if (excel != null)
+                {
+                    var Datos = Convert.ToBase64String(excel);
+                    Session["cacheKey"] = Datos;
+                    MyIframe.Attributes["src"] = "Excel.aspx";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = ex.Message;
+
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+               "$('#MainContent_ModalError').modal('show') ", true);
+
+            }
+
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
@@ -419,7 +487,7 @@ namespace Ntlink33
                 ViewState["facturas"] = lista;
                 this.gvFacturas.DataSource = lista;
                 this.gvFacturas.DataBind();
-                CalculaTotales(lista);
+                //CalculaTotales(lista);
                 this.gvFacturaCustumer.DataSource = lista;
                 this.gvFacturaCustumer.DataBind();
             }
@@ -430,11 +498,14 @@ namespace Ntlink33
             this.gvFacturas.DataSource = ViewState["facturas"];
             this.gvFacturas.PageIndex = e.NewPageIndex;
             this.gvFacturas.DataBind();
-            this.CalculaTotales(ViewState["facturas"] as List<vventas>);
+           // this.CalculaTotales(ViewState["facturas"] as List<vventas>);
         }
 
         protected void btnEnviarMail_Click(object sender, EventArgs e)
         {
+
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop",
+                   "$('#MainContent_ModalCorreo').modal('hide');", true);
             var cliente = NtLinkClientFactory.Cliente();
             using (cliente as IDisposable)
             {
@@ -463,16 +534,21 @@ namespace Ntlink33
                 catch (FaultException fe)
                 {
                     lblError.Text = fe.Message;
-                    mpMensajeError.Show();
-
+                    //mpMensajeError.Show();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                   "$('body').css('padding-right', '0px'); " +
+                  "$('#MainContent_ModalError').modal('show') ", true);
                 }
 
-                this.mpeEmail.Hide();
+              //  this.mpeEmail.Hide();
             }
         }
 
         protected void btnPagar_Click(object sender, EventArgs e)
         {
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop",
+               "$('#MainContent_ModalPagar').modal('hide');", true);
+
             var cliente = NtLinkClientFactory.Cliente();
             using (cliente as IDisposable)
             {
@@ -482,13 +558,18 @@ namespace Ntlink33
                 }
                 catch (FaultException fe)
                 {
-                    this.lblErrorPago.Text = fe.Message;
-                    mpMensajeError.Show();
 
+                    this.lblErrorPago.Text = fe.Message;
+                    // mpMensajeError.Show();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                "$('body').css('padding-right', '0px'); " +
+               "$('#MainContent_ModalError').modal('show') ", true);
+                    return;
                 }
             }
+
             FillView();
-            this.mpePagar.Hide();
+           //this.mpePagar.Hide();
         }
 
         #region Helper Methods
@@ -507,7 +588,9 @@ namespace Ntlink33
                     if ((fechaFinal - fechaInicial).TotalDays > 93)
                     {
                         lblError.Text = "El rango de fechas no puede ser mayor a 93 dias";
-                        mpMensajeError.Show();
+                        // mpMensajeError.Show();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                       "$('#MainContent_ModalError').modal('show') ", true);
 
                     }
                     else
@@ -553,38 +636,43 @@ namespace Ntlink33
                         this.gvFacturas.DataSource = lista;
                         this.gvFacturas.DataBind();
 
-                        CalculaTotales(lista);
+                        //CalculaTotales(lista);
                         this.gvFacturaCustumer.DataSource = lista;
                         this.gvFacturaCustumer.DataBind();
                     }
                 }
         }
 
-        private void CalculaTotales(List<vventas> lista)
-        {
-            var subt = lista.Where(c => c.Cancelado == 0).Sum(p => p.SubTotal);
-            var total = lista.Where(c => c.Cancelado == 0).Sum(p => p.Total);
-            var iva = lista.Where(c => c.Cancelado == 0).Sum(p => p.IVA);
-            var retiva = lista.Where(c => c.Cancelado == 0 && c.RetIva.HasValue).Sum(p => p.RetIva);
-            var retisr = lista.Where(c => c.Cancelado == 0 && c.RetIsr.HasValue).Sum(p => p.RetIsr);
-            var ieps = lista.Where(c => c.Cancelado == 0 && c.Ieps.HasValue).Sum(p => p.Ieps);
+        //private void CalculaTotales(List<vventas> lista)
+        //{
+        //    var subt = lista.Where(c => c.Cancelado == 0).Sum(p => p.SubTotal);
+        //    var total = lista.Where(c => c.Cancelado == 0).Sum(p => p.Total);
+        //    var iva = lista.Where(c => c.Cancelado == 0).Sum(p => p.IVA);
+        //    var retiva = lista.Where(c => c.Cancelado == 0 && c.RetIva.HasValue).Sum(p => p.RetIva);
+        //    var retisr = lista.Where(c => c.Cancelado == 0 && c.RetIsr.HasValue).Sum(p => p.RetIsr);
+        //    var ieps = lista.Where(c => c.Cancelado == 0 && c.Ieps.HasValue).Sum(p => p.Ieps);
 
-            if (this.gvFacturas.FooterRow != null)
-            {
-                this.gvFacturas.FooterRow.Cells[0].Text = "TOTAL";
-                this.gvFacturas.FooterRow.Cells[6].Text = subt.Value.ToString("C");
-                //this.gvFacturas.FooterRow.Cells[7].Text = iva.Value.ToString("C");
-                //this.gvFacturas.FooterRow.Cells[8].Text = retiva.Value.ToString("C");
-                //this.gvFacturas.FooterRow.Cells[9].Text = retisr.Value.ToString("C");
-                //this.gvFacturas.FooterRow.Cells[10].Text = ieps.Value.ToString("C");
-                this.gvFacturas.FooterRow.Cells[7].Text = total.Value.ToString("C");
-            }
-        }
+        //    if (this.gvFacturas.FooterRow != null)
+        //    {
+        //        this.gvFacturas.FooterRow.Cells[0].Text = "TOTAL";
+        //        this.gvFacturas.FooterRow.Cells[6].Text = subt.Value.ToString("C");
+        //        //this.gvFacturas.FooterRow.Cells[7].Text = iva.Value.ToString("C");
+        //        //this.gvFacturas.FooterRow.Cells[8].Text = retiva.Value.ToString("C");
+        //        //this.gvFacturas.FooterRow.Cells[9].Text = retisr.Value.ToString("C");
+        //        //this.gvFacturas.FooterRow.Cells[10].Text = ieps.Value.ToString("C");
+        //        this.gvFacturas.FooterRow.Cells[7].Text = total.Value.ToString("C");
+        //    }
+        //}
 
         #endregion
 
         protected void lnkDelete_Click(object sender, EventArgs e)
         {
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop",
+                 "$('#MainContent_ModalCancelar').modal('hide');"+
+            "$('body').css('padding-right', '0px'); ", true);
+
+
             var idcliente = ViewState["IDCli"] as int?;
             if (idcliente != null)
             {
@@ -602,7 +690,10 @@ namespace Ntlink33
                         {
 
                             this.lblError.Text = "SelloCFDI no encontrado";
-                            mpMensajeError.Show();
+                            //  mpMensajeError.Show();
+                            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                           "$('#MainContent_ModalError').modal('show') ", true);
+
                             return;
                         }
                         int tam_var = factu.SelloCFD.Length;
@@ -614,17 +705,26 @@ namespace Ntlink33
 
 
                         var cancelacion = cliente.CancelarFactura(venta.RfcEmisor, venta.Guid, cadena, venta.RFC);
-                        lblError.Text = cancelacion;
-                        mpMensajeError.Show();
 
+                        lblError.Text = cancelacion;
+                        //mpMensajeError.Show();
+                        if (cancelacion != "Comprobante Cancelado correctamente")
+                        {
+                            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                           "$('#MainContent_ModalError').modal('show') ", true);
+                        }
+                        else
                         this.FillView();
+
                     }
                 }
                 catch (FaultException fe)
                 {
                     lblError.Text = fe.Message;
-                    mpMensajeError.Show();
-                    this.FillView();
+                    //  mpMensajeError.Show();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                    "$('#MainContent_ModalError').modal('show') ", true);
+                   // this.FillView();
 
                 }
                 catch (Exception fe)
@@ -632,7 +732,7 @@ namespace Ntlink33
                     ;
                 }
 
-                mpex.Hide();
+               // mpex.Hide();
 
 
 
@@ -641,35 +741,31 @@ namespace Ntlink33
 
         protected void gvFacturas_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-                LinkButton lb = e.Row.FindControl("gvlnkDelete") as LinkButton;
-                if (lb != null)
-                    ScriptManager.GetCurrent(this).RegisterAsyncPostBackControl(lb);
+            //    LinkButton lb = e.Row.FindControl("gvlnkDelete") as LinkButton;
+            //    if (lb != null)
+            //        ScriptManager.GetCurrent(this).RegisterAsyncPostBackControl(lb);
 
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                if (e.Row.Cells[11].Text == "Cancelado")
-                {
-                    e.Row.BackColor = Color.FromName("#FEDDB8");
-                }
-                if (e.Row.Cells[11].Text == "Pendiente")
-                {
-                    e.Row.Cells[11].Text = "Vigente Pendiente";
-                    e.Row.BackColor = Color.FromName("#e4e5e7");
-                }
-                if (e.Row.Cells[11].Text == "Pagado")
-                {
-                    e.Row.Cells[11].Text = "Vigente Pagado";
+            //if (e.Row.RowType == DataControlRowType.DataRow)
+            //{
+            //    if (e.Row.Cells[7].Text == "Cancelado")
+            //    {
+            //        e.Row.BackColor = Color.FromName("#FEDDB8");
+            //    }
+            //    if (e.Row.Cells[7].Text == "Pendiente")
+            //    {
+            //        e.Row.Cells[7].Text = "Vigente Pendiente";
+            //        e.Row.BackColor = Color.FromName("#e4e5e7");
+            //    }
+            //    if (e.Row.Cells[7].Text == "Pagado")
+            //    {
+            //        e.Row.Cells[7].Text = "Vigente Pagado";
 
-                    e.Row.BackColor = Color.FromName("#b3d243");
-                }
-            }
+            //        e.Row.BackColor = Color.FromName("#b3d243");
+            //    }
+            //}
         }
 
-        protected void btnCerrarPagar_Click(object sender, EventArgs e)
-        {
-            FillView();
-            mpePagar.Show();
-        }
+       
 
         protected void btnDescargarTodo_OnClick(object sender, EventArgs e)
         {
@@ -695,17 +791,27 @@ namespace Ntlink33
                         return;
                     var empresa = cte.ObtenerEmpresaById(idEmp.Value);
                     var bytes = cte.GetFacturasZip(lista, empresa.RFC);
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + empresa.RFC + "_Comprobantes" + ".zip");
-                    this.Response.ContentType = "application/zip, application/octet-stream";
 
-                    this.Response.BinaryWrite(bytes);
-                    this.Response.End();
+                    if (bytes != null)
+                    {
+                        var Datos = Convert.ToBase64String(bytes);
+                        Session["cacheName"] = empresa.RFC;
+                        Session["cacheKey"] = Datos;
+
+                        MyIframe.Attributes["src"] = "ZIP.aspx";
+
+                    }
+
+                    
                 }
             }
             catch (Exception ee)
             {
                 lblError.Text = "Ocurrió un error al obtener el archivo";
-                mpMensajeError.Show();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                "$('#MainContent_ModalError').modal('show') ", true);
+
+
 
             }
 

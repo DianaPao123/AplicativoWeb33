@@ -8,10 +8,8 @@
 
 
 
-    <asp:UpdatePanel ID="up1" runat="server"   >
-    <ContentTemplate>
   
-         <script type="text/javascript">
+<%--         <script type="text/javascript">
 
          function cargarFuncion() {
                // nombre de archivo subido
@@ -26,7 +24,7 @@ $(".custom-file-input").on("change", function() {
 
           <script type="text/javascript">
          Sys.WebForms.PageRequestManager.getInstance().add_endRequest(cargarFuncion);
-    </script>
+    </script>--%>
   <style type="text/css">
  
                   .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
@@ -48,6 +46,9 @@ $(".custom-file-input").on("change", function() {
             </div>
             <div class ="card-body" >
     
+                
+    <asp:UpdatePanel ID="up1" runat="server"  UpdateMode="Conditional"  >
+    <ContentTemplate>
       <%-- <div class = "row">
                     <div class = "form-group col-lg-12">
                
@@ -250,9 +251,14 @@ $(".custom-file-input").on("change", function() {
                   </div>
  </div>
        
+        </ContentTemplate>
+        </asp:UpdatePanel>
+
+<%--   <asp:UpdatePanel ID="UpdatePanel2" runat="server"  UpdateMode="Conditional"   >
+    <ContentTemplate>--%>
        <h4><strong class="style1">Carga de Certificados</strong></h4>
          <!--td class="style159">Si la validación es:“El CSD es correcto”,vuelva a cargar el Cer, Key, Password y de click en Guardar</td-->
-         
+                   
                    <div class = "row">  <div class = "form-group col-lg-2"></div>
                   
                            <div class = "form-group col-lg-6">
@@ -260,7 +266,9 @@ $(".custom-file-input").on("change", function() {
                        <div class="input-group" style="width:100%">
                         <span class="input-group-btn">
                        <span class="btn btn-default " onclick="$(this).parent().find('input[type=file]').click();">Certificado</span>
-                        <asp:FileUpload runat="server" ID="fuCertificado" CssClass="custom-file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file"/>
+                        <asp:FileUpload runat="server" ID="fuCertificado" CssClass="custom-file-input" 
+                            onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" 
+                            style="display: none;" type="file"/>
                          </span><span class="form-control">Seleccione un Certificado</span>
                          </div>
                                
@@ -268,7 +276,7 @@ $(".custom-file-input").on("change", function() {
 
          
                           <div class = "form-group col-lg-3">
-                                      <asp:Label runat="server" ID="lblVencimiento"  CssClass="alert-info"></asp:Label></td>
+                                      <asp:Label runat="server" ID="lblVencimiento"  CssClass="alert-info"></asp:Label>
 
       </div>
 </div>
@@ -279,7 +287,8 @@ $(".custom-file-input").on("change", function() {
                        <div class="input-group" style="width:100%">
                         <span class="input-group-btn">
                        <span class="btn btn-default " onclick="$(this).parent().find('input[type=file]').click();">Llave</span>
-                        <asp:FileUpload runat="server" ID="fuLlave" CssClass="custom-file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file"/>
+                        <asp:FileUpload runat="server" ID="fuLlave" CssClass="custom-file-input" 
+                            onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file"/>
                          </span><span class="form-control">Seleccione Llave Privada</span>
                          </div>
                                
@@ -306,16 +315,125 @@ $(".custom-file-input").on("change", function() {
                                       Text="Concepto" runat="server"   OnClick="btnValidar_Click" >
                            <span class="fas fa-check "></span> Validar y Guardar 
                          </asp:LinkButton>
+
+
                </div>
                </div>
                      </div>
-               
+    <%--     </ContentTemplate>
+       <Triggers>
+       
+       </Triggers>
+
+       </asp:UpdatePanel>--%>
     
 </div>
          </div>
 
         <!-- mwnsajes-->
-        <asp:ModalPopupExtender ID="mpeSELLOS" runat="server" PopupControlID="pnlMSG"
+         <div id="ModalError" class="modal fade" data-backdrop="static" role="dialog"
+        runat="server" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header d-block " style="padding:10px 10px 0 10px; background-color:#eb8181 ">
+        <h4 class="d-inline-block ml-3" style="color:white" >Error </h4>
+               <button type="button" class="close  bottom-ri    ght mr-3 btn-lg" aria-label="Close" data-dismiss="modal" style="font-size: 40px;">
+                 <span aria-hidden="true">&times;</span></button>
+                       </div>
+
+                
+      <div class="modal-body">
+           <div class = "row">
+                    
+                    <div class = "col-12">
+                   <asp:UpdatePanel ID="UpdatePanel4" runat="server"  UpdateMode="Conditional"   >
+                    <ContentTemplate>
+                <asp:Label runat="server" ID="lblError" Text="Mensaje:" CssClass="form-label"  Visible="True"   />
+              </ContentTemplate>
+                       <Triggers>
+                          <%--   <asp:AsyncPostBackTrigger  ControlID="btnValidar" EventName="Click" />--%>
+                      
+                             
+                       
+                       </Triggers>
+                    </asp:UpdatePanel>
+                        
+                    </div>
+                    </div>
+                     
+        
+     </div>
+    
+      <div class="modal-footer">
+              
+    
+
+        <asp:HiddenField ID="HiddenField1" runat="server" />
+
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+               <span class="glyphicon glyphicon-remove-sign p-1" title="cerrar"></span>Cerrar</button>
+
+      </div>
+
+    </div>
+
+  </div>
+    </div>
+    
+
+           <div id="ModalOK" class="modal fade" data-backdrop="static" role="dialog"
+        runat="server" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header d-block " style="padding:10px 10px 0 10px; background-color:#A8CF38 ">
+        <h4 class="d-inline-block ml-3" style="color:white" >Mensaje</h4>
+               <button type="button" class="close  bottom-ri    ght mr-3 btn-lg" aria-label="Close" data-dismiss="modal" style="font-size: 40px;">
+                 <span aria-hidden="true">&times;</span></button>
+                       </div>
+
+                
+      <div class="modal-body">
+           <div class = "row">
+                    
+                    <div class = "col-12">
+                   <asp:UpdatePanel ID="UpdatePanel1" runat="server"  UpdateMode="Conditional"   >
+                    <ContentTemplate>
+                
+        <asp:Label runat="server" ID="LblSolucion" Text="Solucion:"   CssClass="form-label"    Visible="True"/>
+              </ContentTemplate>
+                       <Triggers>
+                         <%--    <asp:AsyncPostBackTrigger  ControlID="btnValidar" EventName="Click" />--%>
+                      
+                             
+                       
+                       </Triggers>
+                    </asp:UpdatePanel>
+                        
+                    </div>
+                    </div>
+                     
+        
+     </div>
+    
+      <div class="modal-footer">
+              
+    
+
+        <asp:HiddenField ID="HiddenField2" runat="server" />
+
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+               <span class="glyphicon glyphicon-remove-sign p-1" title="cerrar"></span>Cerrar</button>
+
+      </div>
+
+    </div>
+
+  </div>
+    </div>
+    
+
+
+  <%--      <asp:ModalPopupExtender ID="mpeSELLOS" runat="server" PopupControlID="pnlMSG"
          TargetControlID="btngenerarDummy" OkControlID="btnCerrar" BackgroundCssClass="modalBackground">
     </asp:ModalPopupExtender>
     <asp:Panel ID="pnlMSG" runat="server" CssClass="modalPopup" Style="display: none">
@@ -327,9 +445,7 @@ $(".custom-file-input").on("change", function() {
                    <div class = "row"> 
             <div class="col-lg-11" >
       
-        <asp:Label runat="server" ID="LblMensaje" Text="Mensaje:" 
-                            Visible="True" class="style161" style="color: #F72020"/>
-                </div>
+               </div>
                        </div>
         <br />
         <br />
@@ -349,38 +465,10 @@ $(".custom-file-input").on("change", function() {
                    </div>
             </div>
     </asp:Panel>
-    <asp:Button runat="server" ID="btngenerarDummy" Style="display: none;" />
+    <asp:Button runat="server" ID="btngenerarDummy" Style="display: none;" />--%>
 
         
 
-
-<asp:Button ID="btnShow3" runat="server" Style="display:none"  Text="Show Modal Popup" />
-     <asp:ModalPopupExtender ID="mpMensajeError" runat="server" PopupControlID="PanelError"
-         TargetControlID="btnShow3" OkControlID="btnYes3" BackgroundCssClass="modalBackground">
-    </asp:ModalPopupExtender>
-    <asp:Panel ID="PanelError" runat="server" CssClass="modalPopup" Style="display: none">
-        <div class="header"  style="background-color:red">
-            Error
-        </div>
-        <div class="body">
-            <br />
-             <div class = "row">
-       <div class = "form-group col-lg-12">
-       <asp:Label runat="server" ID="lblError" ForeColor="Red" />
-       </div>
-
-        </div>
-        <div class="footer" >
-         <asp:HiddenField ID="HiddenField4" runat="server" />
-                                    
-            <asp:Button ID="btnYes3" runat="server" Text="Aceptar"  CssClass="btn btn-outline-success" />
-                         
-        </div>
-    </asp:Panel>
-
-
-        </ContentTemplate>
-        </asp:UpdatePanel>
 
 
 </asp:Content>

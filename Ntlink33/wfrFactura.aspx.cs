@@ -1628,11 +1628,12 @@ namespace Ntlink33
             else
             {
 
-                 // this.lblOK.Text = "Comprobante Previo generado correctamente";
-                 //  mpMensajeOK.Show();
+                // this.lblOK.Text = "Comprobante Previo generado correctamente";
+                //  mpMensajeOK.Show();
                 // UpdatePanel7.Update();
-
-                Session["cacheKey"] = pdf;
+                Session["cacheTipo"] = "pdf";
+                Session["cacheName"] = "preview";
+               Session["cacheKey"] = pdf;
                 MyIframe.Attributes["src"] = "PDF.aspx";
 
                 return;
@@ -2526,8 +2527,8 @@ namespace Ntlink33
                 else
                 {
 
-                   
-
+                    Session["cacheTipo"] = "pdf";
+                    Session["cacheName"] = "CFDI";
                     Session["cacheKey"] = pdf;
                     MyIframe.Attributes["src"] = "PDF.aspx";
 

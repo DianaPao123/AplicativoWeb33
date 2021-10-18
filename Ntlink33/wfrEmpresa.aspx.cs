@@ -65,7 +65,10 @@ namespace Ntlink33
                 if (this.fuLogoEmpresa.FileBytes.Length > (50 * 1024))
                 {
                     this.lblError.Text = "El tamaño del archivo de logo no debe exceder los 50 Kb.";
-                    mpMensajeError.Show();
+                    // mpMensajeError.Show();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                 "$('#MainContent_ModalError').modal('show') ", true);
+
                     return;
                 }
             }
@@ -108,7 +111,10 @@ namespace Ntlink33
                     catch (FaultException ex)
                     {
                         this.lblError.Text = ex.Message;
-                        mpMensajeError.Show();
+                        //mpMensajeError.Show();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                "$('#MainContent_ModalError').modal('show') ", true);
+
                     }
                 }
             }
@@ -135,7 +141,10 @@ namespace Ntlink33
                 catch (FaultException ex)
                 {
                     this.lblError.Text = ex.Message;
-                    mpMensajeError.Show();
+                    // mpMensajeError.Show();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                 "$('#MainContent_ModalError').modal('show') ", true);
+
                 }
             }
         }
@@ -305,7 +314,8 @@ namespace Ntlink33
             var cliente = NtLinkClientFactory.Cliente();
             byte[] cert = null;
             byte[] key = null;
-            if (this.fuCertificado.HasFile)
+           
+                if (this.fuCertificado.HasFile)
             {
                 cert = this.fuCertificado.FileBytes;
                 ViewState["Cert"]= cert;
@@ -332,25 +342,29 @@ namespace Ntlink33
                 var extension = Path.GetExtension(fuLlave.FileName).ToLower();
                 lblAdvertencia.Text = cliente.ValidarCSD(modEmpresa, cert, key, this.txtPassWordLlave.Text, extension);
                 //------------------------------------------------------------------------------------------------------------
-                LblMensaje.Text = lblAdvertencia.Text + ".";
+               // LblMensaje.Text = lblAdvertencia.Text + ".";
                 if (lblAdvertencia.Text == "El RFC del emisor no corresponde con el certificado")
                 {
-                    LblSolucion.Text = "Verifique que los archivos correspondan con el RFC: " + txtRFC.Text;
+                    lblError.Text = "Verifique que los archivos correspondan con el RFC: " + txtRFC.Text;
                 }
                 else if (lblAdvertencia.Text == "El Certificado no es de tipo CSD")
                 {
-                    LblSolucion.Text = "Verifique que este cargando los archivos correspondientes al Certificado de Sello Digital.";
+                    lblError.Text = "Verifique que este cargando los archivos correspondientes al Certificado de Sello Digital.";
                 }
                 else if (lblAdvertencia.Text == "El Password de la llave no es correcta")
                 {
-                    LblSolucion.Text = "Verifique que el Password sea correcto e intente nuevamente.";
+                    lblError.Text = "Verifique que el Password sea correcto e intente nuevamente.";
                 }
                 else if (lblAdvertencia.Text == "El Certificado CSD  es correcto")
                 {
-                    LblSolucion.Text = "Vuelva a cargar los archivos .Cer, .Key y Password. A continuación de click en 'Guardar'.";
+                    lblError.Text = "Vuelva a cargar los archivos .Cer, .Key y Password. A continuación de click en 'Guardar'.";
                     Guardar();
                 }
-                mpeSELLOS.Show();
+                if (string.IsNullOrEmpty(lblAdvertencia.Text))
+                    lblError.Text = "Error en los archivos cargados";
+                //  mpeSELLOS.Show();
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                      "$('#MainContent_ModalError').modal('show') ", true);
                 //------------------------------------------------------------------------------------------------------------------
             }
         }
@@ -368,7 +382,11 @@ namespace Ntlink33
                 if (this.fuLogoEmpresa.FileBytes.Length > (50 * 1024))
                 {
                     this.lblError.Text = "El tamaño del archivo de logo no debe exceder los 50 Kb.";
-                    mpMensajeError.Show();
+                    // mpMensajeError.Show();
+
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                          "$('#MainContent_ModalError').modal('show') ", true);
+
                     return;
                 }
             }
@@ -411,7 +429,10 @@ namespace Ntlink33
                     catch (FaultException ex)
                     {
                         this.lblError.Text = ex.Message;
-                        mpMensajeError.Show();
+                        //  mpMensajeError.Show();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                     "$('#MainContent_ModalError').modal('show') ", true);
+
                     }
                 }
             }
@@ -438,27 +459,33 @@ namespace Ntlink33
                 catch (FaultException ex)
                 {
                     this.lblError.Text = ex.Message;
-                    mpMensajeError.Show();
+                    // mpMensajeError.Show();
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                    "$('#MainContent_ModalError').modal('show') ", true);
+
                 }
             }
             LblSolucion.Text = "CSD Cargado exitosamente.";
             //mpeSELLOS.Show();
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), " ShowPopup",
+                 "$('#MainContent_ModalOK').modal('show') ", true);
+
         }
 
         //-------------------------------------------------------------
-        protected void btnCerrar_Click(object sender, EventArgs e)
-        {
-            if (lblAdvertencia.Text != "El Certificado CSD  es correcto")
-            {
-                mpeSELLOS.Hide();
-                //lblAdvertencia.Text = "";
-                LblMensaje.Text = "";
-                LblSolucion.Text = "Favor de Comunicarse a soporte.";
-            }
-            else {
-                this.Response.Redirect("wfrEmpresasConsulta.aspx");
-            }
-        }
+        //protected void btnCerrar_Click(object sender, EventArgs e)
+        //{
+        //    if (lblAdvertencia.Text != "El Certificado CSD  es correcto")
+        //    {
+        //        mpeSELLOS.Hide();
+        //        //lblAdvertencia.Text = "";
+        //        LblMensaje.Text = "";
+        //        LblSolucion.Text = "Favor de Comunicarse a soporte.";
+        //    }
+        //    else {
+        //        this.Response.Redirect("wfrEmpresasConsulta.aspx");
+        //    }
+        //}
         //--------------------------------------------------------------
     }
 }

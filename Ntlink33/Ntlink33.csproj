@@ -135,6 +135,8 @@
     <Content Include="Content\Paginacion.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
+    <Content Include="LogOut.aspx" />
+    <Content Include="ZIP.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -148,6 +150,7 @@
     <Content Include="Imagen\processed %282%29.ico" />
     <Content Include="Imagen\processed.ico" />
     <Content Include="Imagen\Sat.png" />
+    <Content Include="Excel.aspx" />
     <Content Include="PDF.aspx" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
@@ -363,8 +366,29 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="LogOut.aspx.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LogOut.aspx.designer.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ZIP.aspx.cs">
+      <DependentUpon>ZIP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ZIP.aspx.designer.cs">
+      <DependentUpon>ZIP.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Excel.aspx.cs">
+      <DependentUpon>Excel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Excel.aspx.designer.cs">
+      <DependentUpon>Excel.aspx</DependentUpon>
     </Compile>
     <Compile Include="PDF.aspx.cs">
       <DependentUpon>PDF.aspx</DependentUpon>
