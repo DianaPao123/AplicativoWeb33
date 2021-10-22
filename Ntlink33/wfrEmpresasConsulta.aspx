@@ -7,17 +7,17 @@
             <div class="card-header">
                <h3>Empresas</h3>
             </div>
-            <div class ="card-body" >
+            <div class ="card-body" style=" background-color:white" >
           <asp:UpdatePanel ID="up1" runat="server"  UpdateMode="Conditional"  >
     <ContentTemplate>
   
                     <div  class="row mt-4">
                 <div class = "col-12">
-                  <div class="table-responsive  border border-dark">
-                          <asp:GridView ID="gvEmpresas" class="table table-bordered table-hover table-striped grdViewTable" 
+              <%--    <div class="table-responsive  border border-dark"  style="z-index:1"  >--%>
+                          <asp:GridView ID="gvEmpresas" class="table table-bordered table-hover table-striped grdViewTable table-responsive  border border-dar" 
                          runat="server" AutoGenerateColumns="false" BackColor="White" AlternatingRowStyle-HorizontalAlign="Left"  
                          onrowcommand="gvEmpresas_RowCommand" Width="100%" RowStyle-Height="5" FooterStyle-BorderStyle="None"
-                              DataKeyNames="IdEmpresa" AllowPaging="True" ItemStyle-Height = "5px"   >
+                              DataKeyNames="IdEmpresa" AllowPaging="True" ItemStyle-Height = "5px"  >
                          <RowStyle  Height="10" Font-Size="14px"  cssclass="RowStyle" />
                          <FooterStyle  Font-Bold="True"  BorderStyle="None" />
                          <PagerStyle  Height="5" />
@@ -34,9 +34,9 @@
           <%--  <asp:ButtonField Text="Editar" CommandName="EditarEmpresa" />
             <asp:ButtonField Text="Sucursales(Lugar de Expedición)" CommandName="EditarSucursal" />
            <asp:ButtonField Text="Conceptos" CommandName="EditarConceptos" />
-         --%>     <asp:TemplateField HeaderStyle-CssClass="sorting_disabled"  HeaderText= "Opciones"   ItemStyle-HorizontalAlign="Center">
+         --%>     <asp:TemplateField  HeaderText= "Opciones"   ItemStyle-HorizontalAlign="Center">
                              <ItemTemplate  >
-                                <div class="row ">
+                               <%-- <div class="row ">
                                  <div class="form-inline col-12" >
                                   <asp:LinkButton ID="gvlnkEditC" CommandName="EditarEmpresa" 
                                       CommandArgument='<%#((GridViewRow)Container).RowIndex%>' 
@@ -55,12 +55,46 @@
                                         </asp:LinkButton>
                         
                                 </div>
-                                     </div>
+                                     </div>--%>
+                                  
+                                            <div class="dropdown"  >
+  <button class="btn btn-light dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" 
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+    Más
+  </button>
+  <div class="dropdown-menu dropdown-menu-right"   aria-labelledby="dropdownMenuButton"  >
+    <a class="dropdown-item ">
+        <asp:LinkButton ID="LinkButton1" CommandName="EditarEmpresa" Text="EditarEmpresa" 
+                                      CommandArgument='<%#((GridViewRow)Container).RowIndex%>' 
+                                      CssClass="dropdown-item" runat="server"  Width="100%" >
+                                     
+                                        </asp:LinkButton>
+        </a>
+      <a class="dropdown-item" >
+                <asp:LinkButton ID="LinkButton2" CommandName="EditarSucursal"  Text="EditarSucursal"
+                                          CommandArgument='<%#((GridViewRow)Container).RowIndex%>' 
+                                            CssClass="dropdown-item" runat="server"  Width="100%" >
+                                     
+                                        </asp:LinkButton>
+                                
+    </a>
+      <a class="dropdown-item" >
+                <asp:LinkButton ID="LinkButton3" CommandName="EditarConceptos"  Text="EditarConceptos"
+                                          CommandArgument='<%#((GridViewRow)Container).RowIndex%>' 
+                                            CssClass="dropdown-item" runat="server" Width="100%" >
+                                          
+                                        </asp:LinkButton>
+                        
+      </a>
+
+      </div>
+                                                </div>
+                                         
                             </ItemTemplate>
                         </asp:TemplateField>
         </Columns>
     </asp:GridView>
-                      </div>
+                     <%-- </div>--%>
         </div>
                         </div>
 

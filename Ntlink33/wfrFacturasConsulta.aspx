@@ -16,11 +16,32 @@
 
             
         }
+
+    body, html {
+    background-color:white;
+    }
     </style>
 
-              
+      <style type="text/css">
  
-              
+                  .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%;
+}
+                
+                .bootstrap-select.btn-group .dropdown-menu.inner {
+                max-width:300px;
+                }
+
+              .optionAlinear {
+   text-align:left;   
+}
+
+
+
+      </style>
+           
+
+    
      <div  class = "card mt-2">   
             <div class="card-header">
                <h3>Consultas CFDI</h3>
@@ -47,13 +68,15 @@
       <div class = "row">
    <div class = "form-group col-lg-4">
     <asp:Label ID="Label1" runat="server" class="control-label" Text="Empresa"></asp:Label>
-         <asp:DropDownList runat="server" ID="ddlEmpresas" AutoPostBack="true" DataTextField="RazonSocial" CssClass="form-control"
+         <asp:DropDownList runat="server" ID="ddlEmpresas" AutoPostBack="true" DataTextField="RazonSocial"
+             CssClass ="btn btn-default dropdown-toggle optionAlinear" BackColor="White" Width="100%" 
 		DataValueField="idEmpresa" onselectedindexchanged="ddlEmpresas_SelectedIndexChanged" />      
        </div>
    <div class = "form-group col-lg-4">
     <asp:Label ID="Label2" runat="server" class="control-label" Text="Clientes"></asp:Label>
       <asp:DropDownList runat="server" ID="ddlClientes" AppendDataBoundItems="True" DataTextField="RazonSocial"
-			 DataValueField="idCliente"  CssClass ="btn btn-default dropdown-toggle optionAlinear" BackColor="White" Width="100%" />
+			 DataValueField="idCliente" 
+          CssClass ="btn btn-default dropdown-toggle optionAlinear" BackColor="White" Width="100%" />
         </div>
 
           </div>
@@ -93,8 +116,8 @@
     
     <div class = "row">
    <div class = "form-group col-lg-6">
-    <asp:RadioButtonList RepeatDirection="Horizontal" ID="rbStatus" runat="server" RepeatLayout="Flow"  > 
-					<asp:ListItem Text="Todas" Value="Todos" Selected="True" class="radio-inline"/>
+    <asp:RadioButtonList RepeatDirection="Horizontal" ID="rbStatus" runat="server" RepeatLayout="Flow" class="radio-inline" > 
+					<asp:ListItem Text="Todas" Value="Todos" Selected="True"  class="radio-inline"/>
 					
 					<asp:ListItem Text="Pendientes" Value="Pendiente" class="radio-inline"/>
 				    <asp:ListItem Text="Pagadas" Value="Pagado"  class="radio-inline"/>
@@ -134,8 +157,8 @@
 
                      <div  class="row mt-4">
                 <div class = "col-12">
-                  <div class="table-responsive  border border-dark">
-                          <asp:GridView ID="gvFacturas" class="table table-bordered table-hover table-striped grdViewTable" 
+                <div class="table-responsive  border border-dark "  >
+                          <asp:GridView ID="gvFacturas" class="table table-bordered table-hover table-striped grdViewTable "
                          runat="server" AutoGenerateColumns="false" BackColor="White" AlternatingRowStyle-HorizontalAlign="Left"  
                           onrowcommand="gvFacturas_RowCommand"    	onrowdatabound="gvFacturas_RowDataBound" 
                               onpageindexchanging="gvFacturas_PageIndexChanging"  PageSize="10"  AllowPaging="true"
@@ -149,7 +172,7 @@
                           <PagerStyle HorizontalAlign = "Center" Height="5" CssClass="GridPager"  />
 	                     	<Columns>
 			<asp:BoundField HeaderText="Folio" DataField="folio" />
-			<asp:BoundField HeaderText="Folio Fiscal" DataField="Guid" >
+			<asp:BoundField HeaderText="Folio Fiscal" DataField="Guid" ItemStyle-CssClass ="d-none d-md-table-cell" HeaderStyle-CssClass="d-none d-md-table-cell" >
              <FooterStyle HorizontalAlign="Center" Width="20%" Wrap="False" />
                             <HeaderStyle HorizontalAlign="Center" Width="20%" Wrap="False" />
                             <ItemStyle HorizontalAlign="Center" Width="20%" Wrap="False" />
@@ -157,45 +180,82 @@
 			<asp:BoundField HeaderText="Fecha Emisión" DataField="fecha" DataFormatString="{0:d}" />
 		<%--	<asp:BoundField HeaderText="Cliente" DataField="Cliente" />
        --%>     <asp:BoundField HeaderText="RFC Cliente" DataField="Rfc" />
-			<asp:BoundField HeaderText="% I.V.A." DataField="PorcentajeIva" DataFormatString="{0:F2}" ItemStyle-HorizontalAlign="Right" />
-			<asp:BoundField HeaderText="SubTotal" DataField="Subtotal" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
+			<asp:BoundField HeaderText="% I.V.A." DataField="PorcentajeIva" DataFormatString="{0:F2}" ItemStyle-HorizontalAlign="Right" ItemStyle-CssClass ="d-none d-md-table-cell" HeaderStyle-CssClass="d-none d-md-table-cell"/>
+			<asp:BoundField HeaderText="SubTotal" DataField="Subtotal" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" ItemStyle-CssClass ="d-none d-md-table-cell" HeaderStyle-CssClass="d-none d-md-table-cell" />
 	        <asp:BoundField HeaderText="Total" DataField="Total" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
  <%--           <asp:BoundField HeaderText="Usuario" DataField="Usuario"/>--%>
 			<asp:BoundField HeaderText="Status CFDI" DataField="StatusFactura"/>
-            <asp:BoundField HeaderText="Fecha Cancelación" DataField="FechaCancelacion" />
+            <asp:BoundField HeaderText="Fecha Cancelación" DataField="FechaCancelacion" ItemStyle-CssClass ="d-none d-md-table-cell" HeaderStyle-CssClass="d-none d-md-table-cell"  />
 		<%--<asp:ButtonField ButtonType="Link" Text="PDF" CommandName="DescargarPdf" />
 			<asp:ButtonField ButtonType="Link" Text="EnviarEmail" CommandName="EnviarEmail" />--%>
                <asp:TemplateField HeaderStyle-CssClass="sorting_disabled"  HeaderText= "Opciones"     
                    ItemStyle-HorizontalAlign="Center">
              <ItemTemplate>
                    
-                                <div class="mx-auto" style="width: 100px;" >
+                              <%--  <div class="mx-auto" style="width: 100px;" >--%>
 
-                                     <asp:LinkButton ID="gvlnkEditC" CommandName="Pagar" 
+                           <%--          <asp:LinkButton ID="gvlnkEditC" CommandName="Pagar" 
                               CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
                               CssClass="btn btn-light" runat="server" style=" padding:0px 2px;">
                                     <i class="glyphicon glyphicon-usd" title="Pagar"></i> 
-                                        </asp:LinkButton>
+                                        </asp:LinkButton>--%>
                         
-                          <asp:LinkButton ID="LinkButton1" CommandName="DescargarXml" 
+                      <%--    <asp:LinkButton ID="LinkButton1" CommandName="DescargarXml" 
                               CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
                               CssClass="btn btn-light " runat="server" style=" padding:0px 3px;">
                                     <i class="fas fa-file-code" title="XML"></i> 
-                                        </asp:LinkButton>
+                                        </asp:LinkButton>--%>
                      
-                          <asp:LinkButton ID="LinkButton2" CommandName="DescargarPdf" 
+<%--                          <asp:LinkButton ID="LinkButton2" CommandName="DescargarPdf" 
                               CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
                               CssClass="btn btn-light " runat="server" style=" padding:0px 3px;">
                                     <i class="fas fa-file-pdf" title="PDF"></i> 
-                                        </asp:LinkButton>
+                                        </asp:LinkButton>--%>
 
-                        <asp:LinkButton ID="LinkButton3" CommandName="EnviarEmail" 
+                        <%--<asp:LinkButton ID="LinkButton3" CommandName="EnviarEmail" 
                               CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
                               CssClass="btn btn-light" runat="server" style=" padding:0px 2px;">
                                     <i class="glyphicon glyphicon-envelope" title="Email"></i> 
+                                        </asp:LinkButton>--%>
+                                  <%--       </div>--%>
+                          
+                 <div class="dropdown"  >
+  <button class="btn btn-light dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" 
+      data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+    Más
+  </button>
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" >
+                 <asp:LinkButton ID="LinkButton4" CommandName="Pagar" Text="Pagar" 
+                              CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
+                              CssClass="dropdown-item" runat="server" Width="100%">
+                                          </asp:LinkButton>
+
+    </a>
+    <a class="dropdown-item" >
+               <asp:LinkButton ID="LinkButton5" CommandName="DescargarXml" Text="DescargarXml" 
+                              CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
+                              CssClass="dropdown-item" runat="server" Width="100%" >
+                                                      </asp:LinkButton>
+                     
+
+    </a>
+    <a class="dropdown-item" >
+         <asp:LinkButton ID="LinkButton1" CommandName="DescargarPdf" Text="DescargarPdf"
+                              CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
+                              CssClass="dropdown-item " runat="server"  Width="100%">
+                                   
                                         </asp:LinkButton>
-                                         </div>
-                               
+    </a>
+      <a class="dropdown-item" >
+           <asp:LinkButton ID="LinkButton2" CommandName="EnviarEmail" Text="EnviarEmail"
+                              CommandArgument='<%#((GridViewRow)Container).RowIndex%>'
+                              CssClass="dropdown-item " runat="server" Width="100%" >
+                                        </asp:LinkButton>
+    </a>
+
+  </div>
+</div>
                         
                  </ItemTemplate>
             </asp:TemplateField>
@@ -228,7 +288,7 @@
             </asp:TemplateField>
 		</Columns>
 	</asp:GridView> 
-    </div>
+   </div>
 	 
 	<asp:GridView ID="gvFacturaCustumer"  CssClass="page2" Visible="False" runat="server"
         AutoGenerateColumns="False" >
@@ -516,7 +576,42 @@
 
 
 
-             
+        
+<script type="text/javascript">
+
+ (function () {
+    // hold onto the drop down menu                                             
+    var dropdownMenu;
+
+    // and when you show it, move it to the body                                     
+    $(window).on('show.bs.dropdown', function (e) {
+
+    // grab the menu        
+    dropdownMenu = $(e.target).find('.dropdown-menu');
+
+    // detach it and append it to the body
+    $('body').append(dropdownMenu.detach());
+
+    // grab the new offset position
+    var eOffset = $(e.target).offset();
+
+    // make sure to place it where it would normally go (this could be improved)
+    dropdownMenu.css({
+        'display': 'block',
+            'top': eOffset.top + $(e.target).outerHeight(),
+            //'left': eOffset.left
+        //'left': '0',
+        'right':'165px'
+         });
+    });
+
+    // and when you hide it, reattach the drop down, and hide it normally                                                   
+    $(window).on('hide.bs.dropdown', function (e) {
+        $(e.target).append(dropdownMenu.detach());
+        dropdownMenu.hide();
+    });
+})();
+    </script>         
 
  
 

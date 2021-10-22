@@ -76,15 +76,6 @@ namespace Ntlink33 {
         protected global::System.Web.UI.WebControls.Label lblVencimiento;
         
         /// <summary>
-        /// Control lblCliente.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCliente;
-        
-        /// <summary>
         /// Control UpdatePanelR1.
         /// </summary>
         /// <remarks>
@@ -92,6 +83,15 @@ namespace Ntlink33 {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelR1;
+        
+        /// <summary>
+        /// Control lblCliente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCliente;
         
         /// <summary>
         /// Control ddlClientes.

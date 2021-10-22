@@ -3,7 +3,20 @@
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <link href="Content/Paginacion.css" rel="stylesheet" />    
+          <style type="text/css">
+ 
+                  .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%;
+}
+                
+                .bootstrap-select.btn-group .dropdown-menu.inner {
+                max-width:300px;
+                }
 
+              .optionAlinear {
+   text-align:left;   
+}
+      </style>
 <asp:UpdatePanel ID="up1" runat="server"  UpdateMode="Conditional"  >
     <ContentTemplate>
               
@@ -18,7 +31,8 @@
                     <div class = "form-group col-lg-6">
                  <asp:Label ID="Label2" runat="server" class="control-label" Text="Empresa"></asp:Label>
        <asp:DropDownList runat="server" ID="ddlEmpresa" AppendDataBoundItems="True" DataTextField="RazonSocial"
-         DataValueField="IdEmpresa" Enabled="False" CssClass="form-control" />
+         DataValueField="IdEmpresa" Enabled="False"   Width="100%"
+                    CssClass="btn btn-default dropdown-toggle optionAlinear" backColor="White" />
                         </div>
                     <div class = "form-group col-lg-6">
                  <asp:Label ID="Label1" runat="server" class="control-label" Text="RFC o Razón Social"></asp:Label>

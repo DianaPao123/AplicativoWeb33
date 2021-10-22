@@ -135,6 +135,7 @@
     <Content Include="Content\Paginacion.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Imagen\bub.png" />
     <Content Include="LogOut.aspx" />
     <Content Include="ZIP.aspx" />
     <Content Include="favicon.ico" />

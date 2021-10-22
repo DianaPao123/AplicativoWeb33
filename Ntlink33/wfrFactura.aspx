@@ -1,4 +1,4 @@
-﻿<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="wfrFactura.aspx.cs" MaintainScrollPositionOnPostBack="true" Inherits="Ntlink33.wfrFactura"  EnableEventValidation="false" %>
+﻿<%@ Page Title="CFDI 3.3" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="wfrFactura.aspx.cs" MaintainScrollPositionOnPostBack="true" Inherits="Ntlink33.wfrFactura"  EnableEventValidation="false" %>
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
  <%@ MasterType VirtualPath="~/Site.Master" %>
  
@@ -77,6 +77,9 @@ function pageLoad() {
     </script>
 
             <style type="text/css">
+                .anchoDrop {
+                    width:89px;
+                }
         .overrideClass
         {
             left: 0px !important;
@@ -89,12 +92,15 @@ function pageLoad() {
                 
                 .bootstrap-select.btn-group .dropdown-menu.inner {
                 max-width:300px;
+                
                 }
 
               .optionAlinear {
    text-align:left;   
 }
-
+.bootstrapRGV-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 89%;
+}
 
     </style>
       
@@ -161,32 +167,31 @@ function pageLoad() {
                 </div>  
              
                 <div class = "row form-group">
-                    <div class = "col-lg-6">
+                      <div class = "col-lg-6">
+                
+                    <asp:UpdatePanel ID="UpdatePanelR1" runat="server" UpdateMode="Conditional">
+                       <ContentTemplate>                      
                         <asp:Label  class="control-label" ID="lblCliente" runat="server" Text="Cliente"  ></asp:Label>
 
-                           <asp:UpdatePanel ID="UpdatePanelR1" runat="server" UpdateMode="Conditional">
-                            <ContentTemplate>                      
-                            <div style="width:100%;display: flex;  align-items: stretch;">
-                                <asp:DropDownList ID="ddlClientes" runat="server" Width="100%"
-                            CssClass ="drpCountryRGV" data-live-search-style="begins" title="Seleccione"
-                                    data-live-search="true"
+                           <div class="form-inline" style="width:100%">
+                                <asp:DropDownList ID="ddlClientes" runat="server" 
+                            CssClass ="drpCountryRGV bootstrapRGV"  data-live-search-style="begins" title="Seleccione"
+                                    data-live-search="true" 
                                     OnSelectedIndexChanged="ddlClientes_SelectedIndexChanged"
                             DataTextField="RazonSocial"  AutoPostBack="True"  DataValueField="idCliente">
                            </asp:DropDownList>
                   
-                         <asp:LinkButton ID="btnBuscar" CssClass="btn btn-default lineal"   OnClick="btnBuscar_Click" 
+                         <asp:LinkButton ID="btnBuscar" CssClass="btn btn-default "   OnClick="btnBuscar_Click" 
                              runat="server" ><span class="glyphicon glyphicon-search"></span> 
                          </asp:LinkButton>
                                </div>                           
+                  
                             </ContentTemplate>
                             <Triggers>
                              <asp:AsyncPostBackTrigger ControlID="btnBuscarRFC" />
                             </Triggers>
-                           </asp:UpdatePanel>
-
-                    </div>
-                                       
-                   
+                           </asp:UpdatePanel>               
+                     </div> 
                     <div class="col-lg-3 " >
                         <asp:Label  class="control-label" ID="Label12" runat="server" Text="Folio NTLINK" ></asp:Label>
                         <asp:TextBox ID="txtFolio" runat="server" CssClass="form-control"  Enabled="False" />
@@ -776,16 +781,16 @@ function pageLoad() {
                          <Columns>
                         <asp:BoundField HeaderText="Partida" DataField="Partida"  />
                         <asp:BoundField HeaderText="ClaveProdServ" DataField="Codigo" />
-                        <asp:BoundField HeaderText="NoIdentificacion" DataField="ConceptoNoIdentificacion"  />
+                        <asp:BoundField HeaderText="NoIdentificacion" DataField="ConceptoNoIdentificacion"  ItemStyle-CssClass ="d-none d-md-table-cell" HeaderStyle-CssClass="d-none d-md-table-cell" />
                         <asp:BoundField HeaderText="Cantidad" DataField="Cantidad" />
                         <asp:BoundField HeaderText="ClaveUnidad" DataField="ConceptoClaveUnidad"  />
                         <asp:BoundField HeaderText="Unidad" DataField="Unidad"  />
                         <asp:BoundField HeaderText="ValorUnitario" DataField="Precio"  DataFormatString="${0:#,#.######}" />
                    <%--     <asp:BoundField HeaderText="Descripción" DataField="Descripcion" />
                  --%>       <asp:BoundField HeaderText="Importe" DataField="Total" DataFormatString="${0:#,#.######}" />
-                       <asp:BoundField HeaderText="Descuento" DataField="ConceptoDescuento" DataFormatString="${0:#,#.######}"
+                       <asp:BoundField HeaderText="Descuento" DataField="ConceptoDescuento" DataFormatString="${0:#,#.######}" ItemStyle-CssClass ="d-none d-md-table-cell" HeaderStyle-CssClass="d-none d-md-table-cell" 
                              />
-                        <asp:BoundField HeaderText="CuentaPredial" DataField="CuentaPredial" />
+                        <asp:BoundField HeaderText="CuentaPredial" DataField="CuentaPredial"  ItemStyle-CssClass ="d-none d-md-table-cell" HeaderStyle-CssClass="d-none d-md-table-cell" />
                         <%--<asp:BoundField HeaderText="Observaciones" DataField="Observaciones" />--%>
                    <%--     <asp:ButtonField Text="Editar" CommandName="Editar" Visible="False" ItemStyle-HorizontalAlign="Center" />
                    --%>     <asp:TemplateField HeaderStyle-CssClass="sorting_disabled"  HeaderText= "Opciones"   ItemStyle-HorizontalAlign="Center">

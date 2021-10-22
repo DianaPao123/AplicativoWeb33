@@ -3,6 +3,22 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
      <link href="Content/Paginacion.css" rel="stylesheet" />  
 
+      <style type="text/css">
+ 
+                  .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%;
+}
+                
+                .bootstrap-select.btn-group .dropdown-menu.inner {
+                max-width:300px;
+                }
+
+              .optionAlinear {
+   text-align:left;   
+}
+      </style>
+              
+
   <asp:UpdatePanel ID="up1" runat="server"  UpdateMode="Conditional"  >
     <ContentTemplate>
                 <asp:ScriptManagerProxy ID="ScriptManagerProxy1" runat="server" />
@@ -17,7 +33,8 @@
        <asp:Label ID="Label1" runat="server" class="control-label" Text="Empresa Emisora"></asp:Label>
             <asp:DropDownList runat="server" ID="ddlEmpresa" AppendDataBoundItems="true"
                 DataTextField="RazonSocial" 
-                    DataValueField="IdEmpresa" CssClass="form-control"  />
+                    DataValueField="IdEmpresa"   Width="100%"
+                    CssClass="btn btn-default dropdown-toggle optionAlinear" backColor="White" />
     </div>
       
        </div>

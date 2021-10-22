@@ -353,7 +353,7 @@ $(".custom-file-input").on("change", function() {
                        <Triggers>
                           <%--   <asp:AsyncPostBackTrigger  ControlID="btnValidar" EventName="Click" />--%>
                       
-                             
+                             <asp:AsyncPostBackTrigger  ControlID="btnGuardar" EventName="Click" />
                        
                        </Triggers>
                     </asp:UpdatePanel>

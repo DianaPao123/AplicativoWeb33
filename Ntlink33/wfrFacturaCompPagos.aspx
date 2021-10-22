@@ -1,4 +1,4 @@
-﻿<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="wfrFacturaCompPagos.aspx.cs" MaintainScrollPositionOnPostBack="true" Inherits="Ntlink33.wfrFacturaCompPagos"  EnableEventValidation="false" %>
+﻿<%@ Page Title="Pagos" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="wfrFacturaCompPagos.aspx.cs" MaintainScrollPositionOnPostBack="true" Inherits="Ntlink33.wfrFacturaCompPagos"  EnableEventValidation="false" %>
 <%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
  <%@ MasterType VirtualPath="~/Site.Master" %>
  

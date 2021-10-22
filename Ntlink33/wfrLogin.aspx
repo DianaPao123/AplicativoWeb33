@@ -15,7 +15,7 @@
  *:focus {
     outline: 0 !important;
 }
-  
+
 </style>
          
       <script src="Scripts/jquery-3.3.1.min.js"></script>
@@ -783,25 +783,26 @@
                               
                 <LayoutTemplate>
   
-       <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+        <div class="container-fluid px-1 px-md-5 px-lg-5 px-xl-5 py-5 mx-auto">
     <div class="card card0 border-0">
         <div class="row d-flex">
             <div class="col-lg-6">
-                <div class="card1 pb-3">
-                    <div class="row"> <img src="Imagen/Sat.png" class="logo" /> </div>
+                <div class="card1 pb-3 pl-2 py-5">
+                    <div class="row pl-2"> <img src="Imagen/Sat.png" class="logo" /> </div>
                     <div class="row px-1 justify-content-center mt-0 mb-0 border-line"> 
-                        <img src="Imagen/ntlink.png" class="image" /> </div>
+                        <img src="Imagen/login.png" class="image" /> </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="card2 card border-0 px-4 py-3">
-                    <div class="row px-0 mb-4">
-                        <div class="line"></div> <small class=" text-center">Login</small>
+                    <div class="row px-0 mb-2 py-2">
+                        <div class="line"></div> <small class=" text-center"><h6  class="mb-0 text-sm">Login</h6></small>
                         <div class="line"></div>
                     </div>
-                    <div class="row px-3 mb-4"> <label class="mb-1">
+                    <div class="row px-3 mb-4 "> <label class="mb-1">
                             <h6 class="mb-0 text-sm">Correo de Usuario</h6>
                         </label> 
+
 
                        <asp:TextBox ID="UserName" runat="server"   placeholder="Introduzca un correo electrónico válido"
                                                 CssClass="form-control" ></asp:TextBox>
